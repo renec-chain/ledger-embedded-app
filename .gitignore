@@ -1,0 +1,9 @@
+build
+bin
+debug
+dep
+obj
+.vscode
+__pycache__
+.egg
+.pyc
