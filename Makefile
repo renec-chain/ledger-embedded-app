@@ -20,29 +20,70 @@ $(error Environment variable BOLOS_SDK is not set)
 endif
 include $(BOLOS_SDK)/Makefile.defines
 
+########################################
+#        Mandatory configuration       #
+########################################
+
+# Application name
 APPNAME = RENEC
+
+# Application version
 APPVERSION_M=1
 APPVERSION_N=0
 APPVERSION_P=0
 APPVERSION=$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)
 
-ifeq ($(TARGET_NAME), TARGET_NANOS)
-APP_LOAD_PARAMS = --appFlags 0x800 # APPLICATION_FLAG_LIBRARY
-else
-APP_LOAD_PARAMS = --appFlags 0xa00 # APPLICATION_FLAG_LIBRARY + APPLICATION_FLAG_BOLOS_SETTINGS
-endif
-APP_LOAD_PARAMS += --curve ed25519
-APP_LOAD_PARAMS += --path "44'/501'"
-APP_LOAD_PARAMS += $(COMMON_LOAD_PARAMS)
+# Application source files
+APP_SOURCE_PATH += src
 
+# Application icons following guidelines:
+# https://developers.ledger.com/docs/embedded-app/icons/
 ifeq ($(TARGET_NAME),TARGET_NANOS)
 	ICONNAME=icons/nanos_app_renec.gif
-else ifeq ($(TARGET_NAME),TARGET_NANOSP)
-	ICONNAME=icons/nanosp_app_renec.gif
 else ifeq ($(TARGET_NAME),TARGET_STAX)
 	ICONNAME=icons/stax_app_renec.gif
 else
 	ICONNAME=icons/nanox_app_renec.gif
+endif
+
+# Application allowed derivation curves.
+# Possibles curves are: secp256k1, secp256r1, ed25519 and bls12381g1
+# If your app needs it, you can specify multiple curves by using:
+# `CURVE_APP_LOAD_PARAMS = <curve1> <curve2>`
+CURVE_APP_LOAD_PARAMS = ed25519
+
+# Application allowed derivation paths.
+# You should request a specific path for your app.
+# This serve as an isolation mechanism.
+# Most application will have to request a path according to the BIP-0044
+# and SLIP-0044 standards.
+# If your app needs it, you can specify multiple path by using:
+# `PATH_APP_LOAD_PARAMS = "44'/1'" "45'/1'"`
+PATH_APP_LOAD_PARAMS = "44'/501'"   # purpose=coin(44) / coin_type=Testnet(1)
+
+APP_LOAD_PARAMS += $(COMMON_LOAD_PARAMS)
+
+# Enabling DEBUG flag will enable PRINTF and disable optimizations
+DEBUG = 1
+ifneq ($(DEBUG),0)
+	DEFINES += HAVE_PRINTF
+	ifeq ($(TARGET_NAME),TARGET_NANOS)
+		DEFINES += PRINTF=screen_printf
+	else
+		DEFINES += PRINTF=mcu_usb_printf
+	endif
+else
+	DEFINES += PRINTF\(...\)=
+endif
+
+########################################
+#     Application custom permissions   #
+########################################
+
+# See SDK `include/appflags.h` for the purpose of each permission
+HAVE_APPLICATION_FLAG_LIBRARY = 1
+ifneq ($(TARGET_NAME), TARGET_NANOS)
+HAVE_APPLICATION_FLAG_BOLOS_SETTINGS = 1
 endif
 
 ################
@@ -65,19 +106,8 @@ DEFINES += UNUSED\(x\)=\(void\)x
 ## USB HID
 DEFINES += HAVE_IO_USB HAVE_L4_USBLIB IO_USB_MAX_ENDPOINTS=6 IO_HID_EP_LENGTH=64 HAVE_USB_APDU
 
-## USB U2F
-WITH_U2F=0
-ifneq ($(WITH_U2F),0)
-	DEFINES += HAVE_U2F HAVE_IO_U2F U2F_PROXY_MAGIC=\"RENEC\" USB_SEGMENT_SIZE=64 BLE_SEGMENT_SIZE=32
-endif
-
 ## Web USB
 DEFINES += HAVE_WEBUSB WEBUSB_URL_SIZE_B=0 WEBUSB_URL=""
-
-## Bluetooth
-ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_NANOX TARGET_STAX))
-	DEFINES += HAVE_BLE BLE_COMMAND_TIMEOUT_MS=2000 HAVE_BLE_APDU
-endif
 
 ## Protect stack overflows
 DEFINES += HAVE_BOLOS_APP_STACK_CANARY
@@ -91,104 +121,28 @@ ifeq ($(TARGET_NAME),TARGET_STAX)
 	DEFINES += NBGL_QRCODE
 else
 	DEFINES += HAVE_BAGL HAVE_UX_FLOW
-	ifneq ($(TARGET_NAME),TARGET_NANOS)
-		DEFINES += HAVE_GLO096
-		DEFINES += BAGL_WIDTH=128 BAGL_HEIGHT=64
-		DEFINES += HAVE_BAGL_ELLIPSIS
-		DEFINES += HAVE_BAGL_FONT_OPEN_SANS_REGULAR_11PX
-		DEFINES += HAVE_BAGL_FONT_OPEN_SANS_EXTRABOLD_11PX
-		DEFINES += HAVE_BAGL_FONT_OPEN_SANS_LIGHT_16PX
-	endif
 endif
 
-DEFINES += RESET_ON_CRASH
-
-## Use development build
-# DEBUG = 1
-
-# Enable debug PRINTF
-DEBUG = 0
-ifneq ($(DEBUG),0)
-	DEFINES += HAVE_PRINTF
-	ifeq ($(TARGET_NAME),TARGET_NANOS)
-		DEFINES += PRINTF=screen_printf
-	else
-		DEFINES += PRINTF=mcu_usb_printf
-	endif
-else
-	DEFINES += PRINTF\(...\)=
-endif
-
-##############
-#  Compiler  #
-##############
-
-ifneq ($(BOLOS_ENV),)
-	$(info BOLOS_ENV=$(BOLOS_ENV))
-	CLANGPATH := $(BOLOS_ENV)/clang-arm-fropi/bin/
-	GCCPATH := $(BOLOS_ENV)/gcc-arm-none-eabi-5_3-2016q1/bin/
-else
-$(info BOLOS_ENV is not set: falling back to CLANGPATH and GCCPATH)
-endif
-ifeq ($(CLANGPATH),)
-$(info CLANGPATH is not set: clang will be used from PATH)
-endif
-ifeq ($(GCCPATH),)
-$(info GCCPATH is not set: arm-none-eabi-* will be used from PATH)
-endif
-
-WERROR := -Werror=return-type -Werror=parentheses -Werror=format-security
 CC := $(CLANGPATH)clang
-CFLAGS += -O3 -Os -std=gnu99 -Wall -Wextra -Wuninitialized -Wshadow -Wformat=2 -Wwrite-strings -Wundef -fno-common $(WERROR)
 AS := $(GCCPATH)arm-none-eabi-gcc
 LD := $(GCCPATH)arm-none-eabi-gcc
-LDFLAGS += -O3 -Os -Wall
-LDLIBS += -lm -lgcc -lc
+LDFLAGS += -O3 -Os
 
 ##################
 #  Dependencies  #
 ##################
 
+# import generic rules from SDK
+include $(BOLOS_SDK)/Makefile.rules
+
 # import rules to compile glyphs
 include $(BOLOS_SDK)/Makefile.glyphs
 
-### computed variables
-APP_SOURCE_PATH += src
-
 # import SDK source paths per target (https://github.com/LedgerHQ/ledger-secure-sdk)
 SDK_SOURCE_PATH += lib_stusb lib_stusb_impl
-ifneq ($(WITH_U2F),0)
-	SDK_SOURCE_PATH += lib_u2f
-endif
 ifneq ($(TARGET_NAME),TARGET_STAX)
 	SDK_SOURCE_PATH += lib_ux
 endif
-ifeq ($(TARGET_NAME),$(filter $(TARGET_NAME),TARGET_NANOX TARGET_STAX))
-	SDK_SOURCE_PATH += lib_blewbxx lib_blewbxx_impl
-endif
 
-# import custom libs
-WITH_LIBRENEC=1
-ifneq ($(WITH_LIBRENEC),0)
-	SOURCE_FILES += $(filter-out %_test.c,$(wildcard librenec/*.c))
-	CFLAGS += -Ilibrenec/include
-	DEFINES += HAVE_SNPRINTF_FORMAT_U
-	DEFINES += NDEBUG
-endif
-
-load: all load-only
-load-only:
-	python3 -m ledgerblue.loadApp $(APP_LOAD_PARAMS)
-
-load-offline: all
-	python3 -m ledgerblue.loadApp $(APP_LOAD_PARAMS) --offline
-
-delete:
-	python3 -m ledgerblue.deleteApp $(COMMON_DELETE_PARAMS)
-
-include $(BOLOS_SDK)/Makefile.rules
-
+# add dependencies
 dep/%.d: %.c Makefile
-
-listvariants:
-	@echo VARIANTS COIN renec
