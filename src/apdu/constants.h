@@ -8,6 +8,12 @@
 #define P1_CONFIRM 0x01
 #define P1_NON_CONFIRM 0x00
 
+#define P1_FIRST 0x00
+#define P1_MORE 0x80
+
+#define P2_LAST 0x00
+#define P2_MORE 0x80
+
 #define P2_EXTEND 0x01
 #define P2_MORE 0x02
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#define RAW_ED25519_PUBLIC_KEY_SIZE 32
+#define RAW_ED25519_PUBLIC_KEY_SIZE  32
+#define RAW_ED25519_PRIVATE_KEY_SIZE 32
 
 typedef enum {
     ENVELOPE_TYPE_TX = 2,

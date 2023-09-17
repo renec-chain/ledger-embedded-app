@@ -18,4 +18,4 @@
  * @return true if success, false otherwise.
  * 
  */
-bool apdu_parser(command_t *cmd, uint8_t *buf, size_t buf_len);
+// bool apdu_parser(command_t *cmd, uint8_t *buf, size_t buf_len);
