@@ -39,6 +39,10 @@
 
 #define MAX_MESSAGE_LENGTH ROUND_TO_NEXT(TOTAL_SIGN_MESSAGE_BUFFER_LENGTH, USB_SEGMENT_SIZE)
 
+#define HASH_LENGTH        32
+#define PUBKEY_LENGTH      HASH_LENGTH
+#define PRIVATEKEY_LENGTH  HASH_LENGTH
+
 /**
  * Maximum signature length (bytes).
  */
@@ -53,3 +57,5 @@
  * Exponent used to convert mBOL to BOL unit (N BOL = N * 10^3 mBOL).
 */
 #define EXPONENT_SMALLEST_UNIT 3
+
+#define BASE58_PUBKEY_LENGTH 45

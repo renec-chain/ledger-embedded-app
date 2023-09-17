@@ -13,6 +13,7 @@
 #include "common/write.h"
 #include "globals.h"
 #include "io.h"
+#include "ui/ui_api.h"
 
 #ifdef HAVE_BAGL
 void io_seproxyhal_display(const bagl_element_t *element) {
@@ -148,4 +149,20 @@ int io_send_response(const buffer_t *rdata, uint16_t sw) {
 
 int io_send_sw(uint16_t sw) {
     return io_send_response(NULL, sw);
+}
+
+void sendResponse(uint8_t tx, uint16_t sw, bool display_menu) {
+    // Write status word
+    write_u16_be(G_io_apdu_buffer, tx, sw);
+    tx += 2;
+
+    // Send back the response, do not restart the event loop
+    io_exchange(CHANNEL_APDU | IO_RETURN_AFTER_TX, tx);
+
+    // TODO Handle swap
+
+    if (display_menu) {
+        // Display back the original UX
+        ui_idle();
+    }
 }

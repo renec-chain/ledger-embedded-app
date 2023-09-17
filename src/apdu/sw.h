@@ -65,11 +65,31 @@
 // } StatusWord;
 
 /**
+ * Status word for either wrong Lc or minimum APDU lenght is incorrect.
+ */
+#define SW_WRONG_DATA_LENGTH 0x6A87
+
+/**
+ * Status word for wrong transaction length.
+ */
+#define SW_WRONG_TX_LENGTH 0xB004
+
+/**
  * 
  * Status word for wrong response length (buffer too small or too big).
  * 
  */
 #define SW_WRONG_RESPONSE_LENGTH 0xB000
+
+/**
+ * Status word for fail of transaction hash.
+ */
+#define SW_TX_HASH_FAIL 0xB006
+
+/**
+ * Status word for bad state.
+ */
+#define SW_BAD_STATE 0xB007
 
 /**
  * Status word for unknown command with this INS.

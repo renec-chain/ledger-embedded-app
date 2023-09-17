@@ -1,6 +1,7 @@
 #pragma once
 
 // Standard libraries imports
+#include <stdbool.h>
 #include <stdint.h>
 
 // Ledger SDK imports
@@ -60,3 +61,5 @@ int io_send_response(const buffer_t *rdata, uint16_t sw);
  * 
  */
 int io_send_sw(uint16_t sw);
+
+void sendResponse(uint8_t tx, uint16_t sw, bool display_menu);
