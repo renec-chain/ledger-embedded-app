@@ -8,12 +8,12 @@
 #define CLA 0xE0
 
 // header offsets
-#define OFFSET_CLA              0
-#define OFFSET_INS              1
-#define OFFSET_P1               2
-#define OFFSET_P2               3
-#define OFFSET_LC               4
-#define OFFSET_CDATA            5
+#define OFFSET_CLA   0
+#define OFFSET_INS   1
+#define OFFSET_P1    2
+#define OFFSET_P2    3
+#define OFFSET_LC    4
+#define OFFSET_CDATA 5
 
 #define P1_CONFIRM     0x01
 #define P1_NON_CONFIRM 0x00

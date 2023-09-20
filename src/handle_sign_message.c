@@ -28,8 +28,7 @@ static int scan_header_for_signer(const uint32_t *derivation_path,
 }
 
 void handle_sign_message_parse_message(volatile unsigned int *tx) {
-    if (!tx ||
-        G_command.instruction != InsSignMessage ||
+    if (!tx || G_command.instruction != InsSignMessage ||
         G_command.state != ApduStatePayloadComplete) {
         THROW(ApduReplySdkInvalidParameter);
     }
