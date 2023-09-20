@@ -14,7 +14,6 @@
 #define OFFSET_P2               3
 #define OFFSET_LC               4
 #define OFFSET_CDATA            5
-#define DEPRECATED_OFFSET_CDATA 6
 
 #define P1_CONFIRM     0x01
 #define P1_NON_CONFIRM 0x00
@@ -41,15 +40,10 @@
 #define OFFCHAIN_MESSAGE_HEADER_LENGTH 20
 
 typedef enum InstructionCode {
-    // DEPRECATED - Use non "16" suffixed variants below
-    InsDeprecatedGetAppConfiguration = 0x01,
-    InsDeprecatedGetPubkey = 0x02,
-    InsDeprecatedSignMessage = 0x03,
-    // END DEPRECATED
-    InsGetAppConfiguration = 0x04,
-    InsGetPubkey = 0x05,
-    InsSignMessage = 0x06,
-    InsSignOffchainMessage = 0x07
+    InsGetAppConfiguration = 0x01,
+    InsGetPubkey = 0x02,
+    InsSignMessage = 0x03,
+    InsSignOffchainMessage = 0x04
 } InstructionCode;
 
 extern volatile bool G_called_from_swap;

@@ -62,7 +62,6 @@ void handleApdu(volatile unsigned int *flags, volatile unsigned int *tx, int rx)
     }
 
     switch (G_command.instruction) {
-        case InsDeprecatedGetAppConfiguration:
         case InsGetAppConfiguration:
             G_io_apdu_buffer[0] = N_storage.settings.allow_blind_sign;
             G_io_apdu_buffer[1] = N_storage.settings.pubkey_display;
@@ -72,12 +71,10 @@ void handleApdu(volatile unsigned int *flags, volatile unsigned int *tx, int rx)
             *tx = 5;
             THROW(ApduReplySuccess);
 
-        case InsDeprecatedGetPubkey:
         case InsGetPubkey:
             handle_get_pubkey(flags, tx);
             break;
 
-        case InsDeprecatedSignMessage:
         case InsSignMessage:
             handle_sign_message_parse_message(tx);
             handle_sign_message_ui(flags);

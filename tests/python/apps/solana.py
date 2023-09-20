@@ -6,15 +6,10 @@ from ragger.backend.interface import BackendInterface, RAPDU
 
 
 class INS(IntEnum):
-    # DEPRECATED - Use non "16" suffixed variants below
-    INS_GET_APP_CONFIGURATION16 = 0x01
-    INS_GET_PUBKEY16 = 0x02
-    INS_SIGN_MESSAGE16 = 0x03
-    # END DEPRECATED
-    INS_GET_APP_CONFIGURATION = 0x04
-    INS_GET_PUBKEY = 0x05
-    INS_SIGN_MESSAGE = 0x06
-    INS_SIGN_OFFCHAIN_MESSAGE = 0x07
+    INS_GET_APP_CONFIGURATION = 0x01
+    INS_GET_PUBKEY = 0x02
+    INS_SIGN_MESSAGE = 0x03
+    INS_SIGN_OFFCHAIN_MESSAGE = 0x04
 
 
 CLA = 0xE0

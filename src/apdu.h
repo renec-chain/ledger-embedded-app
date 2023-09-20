@@ -60,7 +60,6 @@ typedef struct ApduHeader {
     uint8_t p2;
     const uint8_t* data;
     size_t data_length;
-    bool deprecated_host;
 } ApduHeader;
 
 typedef struct ApduCommand {
@@ -70,7 +69,6 @@ typedef struct ApduCommand {
     uint32_t derivation_path[MAX_BIP32_PATH_LENGTH];
     uint32_t derivation_path_length;
     bool non_confirm;
-    bool deprecated_host;
     uint8_t message[MAX_MESSAGE_LENGTH];
     int message_length;
     Hash message_hash;
