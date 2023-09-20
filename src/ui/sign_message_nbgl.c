@@ -1,11 +1,11 @@
 #ifdef HAVE_NBGL
 
 #include "io.h"
-#include "sol/parser.h"
-#include "sol/printer.h"
-#include "sol/print_config.h"
-#include "sol/message.h"
-#include "sol/transaction_summary.h"
+#include "renec/parser.h"
+#include "renec/printer.h"
+#include "renec/print_config.h"
+#include "renec/message.h"
+#include "renec/transaction_summary.h"
 #include "glyphs.h"
 #include "apdu.h"
 #include "utils.h"
@@ -95,7 +95,7 @@ static nbgl_layoutTagValue_t *get_single_action_review_pair(uint8_t index) {
             flags |= DisplayFlagLongPubkeys;
         }
         if (transaction_summary_display_item(index, flags)) {
-            THROW(ApduReplySolanaSummaryUpdateFailed);
+            THROW(ApduReplyRenecSummaryUpdateFailed);
         }
         memcpy(&displayed_slots[slot].title,
                &G_transaction_summary_title,
@@ -126,7 +126,7 @@ static void start_review(void) {
 }
 
 void start_sign_tx_ui(size_t num_summary_steps) {
-    review_final_long_press.text = "Sign transaction on\nSolana network?";
+    review_final_long_press.text = "Sign transaction on\nRENEC network?";
     review_final_long_press.icon = &C_icon_renec_64x64;
     review_final_long_press.longPressText = "Hold to sign";
     review_final_long_press.longPressToken = 0;
@@ -151,7 +151,7 @@ void start_sign_tx_ui(size_t num_summary_steps) {
 }
 
 void start_sign_offchain_message_ui(bool is_ascii, size_t num_summary_steps) {
-    review_final_long_press.text = "Sign Off-Chain\nmessage on Solana\nnetwork?";
+    review_final_long_press.text = "Sign Off-Chain\nmessage on RENEC\nnetwork?";
     review_final_long_press.icon = &C_icon_renec_64x64;
     review_final_long_press.longPressText = "Hold to sign";
     review_final_long_press.longPressToken = 0;

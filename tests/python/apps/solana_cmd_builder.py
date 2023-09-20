@@ -90,7 +90,7 @@ class CompiledInstruction:
         serialized += self.data
         return serialized
 
-# Solana communication message, header + list of public keys used by the instructions + instructions
+# RENEC communication message, header + list of public keys used by the instructions + instructions
 # with references to the keys array
 class Message:
     header: MessageHeader
@@ -131,7 +131,7 @@ PACKET_DATA_SIZE: int = 1280 - 40 - 8
 U16_MAX = 2^16-1
 
 
-SIGNING_DOMAIN: bytes = b"\xffsolana offchain"
+SIGNING_DOMAIN: bytes = b"\xffrenec offchain"
 # // Header Length = Signing Domain (16) + Header Version (1)
 BASE_HEADER_LEN: int = len(SIGNING_DOMAIN) + 1;
 

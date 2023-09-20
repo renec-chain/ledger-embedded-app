@@ -1,7 +1,7 @@
 #include "utils.h"
 #include "globals.h"
 #include "handle_get_pubkey.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 #include "ui_api.h"
 
 static uint8_t G_publicKey[PUBKEY_LENGTH];

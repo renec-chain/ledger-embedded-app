@@ -34,4 +34,4 @@ jobs:
       - name: Clone
         uses: actions/checkout@v4
       - name: Build unit tests
-        run: make -C libsol
+        run: make -C librenec

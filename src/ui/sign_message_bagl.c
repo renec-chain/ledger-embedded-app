@@ -2,11 +2,11 @@
 
 #include "io.h"
 #include "utils.h"
-#include "sol/parser.h"
-#include "sol/printer.h"
-#include "sol/print_config.h"
-#include "sol/message.h"
-#include "sol/transaction_summary.h"
+#include "renec/parser.h"
+#include "renec/printer.h"
+#include "renec/print_config.h"
+#include "renec/message.h"
+#include "renec/transaction_summary.h"
 #include "apdu.h"
 
 #include "handle_sign_message.h"
@@ -29,7 +29,7 @@ UX_STEP_NOCB_INIT(ux_summary_step,
                           flags |= DisplayFlagLongPubkeys;
                       }
                       if (transaction_summary_display_item(step_index, flags)) {
-                          THROW(ApduReplySolanaSummaryUpdateFailed);
+                          THROW(ApduReplyRenecSummaryUpdateFailed);
                       }
                   },
                   {

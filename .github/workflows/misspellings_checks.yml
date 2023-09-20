@@ -22,4 +22,4 @@ jobs:
       with:
         builtin: clear,rare
         check_filenames: true
-        skip: ./libsol/printer_test.c,./tests/Cargo.lock
+        skip: ./librenec/printer_test.c,./tests/Cargo.lock

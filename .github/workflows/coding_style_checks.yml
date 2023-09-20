@@ -24,9 +24,9 @@ jobs:
           extensions: 'h,c'
           clangFormatVersion: 16.0.3
 
-      - name: Lint libsol
+      - name: Lint librenec
         uses: DoozyX/clang-format-lint-action@v0.16.2
         with:
-          source: './libsol'
+          source: './librenec'
           extensions: 'h,c'
           clangFormatVersion: 16.0.3

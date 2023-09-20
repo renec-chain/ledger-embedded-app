@@ -2,11 +2,11 @@
 #include "utils.h"
 #include "handle_swap_sign_transaction.h"
 
-#include "sol/parser.h"
-#include "sol/printer.h"
-#include "sol/print_config.h"
-#include "sol/message.h"
-#include "sol/transaction_summary.h"
+#include "renec/parser.h"
+#include "renec/printer.h"
+#include "renec/print_config.h"
+#include "renec/message.h"
+#include "renec/transaction_summary.h"
 
 #include "handle_sign_message.h"
 #include "ui_api.h"
@@ -42,8 +42,8 @@ void handle_sign_message_parse_message(volatile unsigned int *tx) {
     size_t signer_index;
 
     if (parse_message_header(&parser, header) != 0) {
-        // This is not a valid Solana message
-        THROW(ApduReplySolanaInvalidMessage);
+        // This is not a valid RENEC message
+        THROW(ApduReplyRenecInvalidMessage);
     }
 
     // Ensure the requested signer is present in the header
@@ -51,7 +51,7 @@ void handle_sign_message_parse_message(volatile unsigned int *tx) {
                                G_command.derivation_path_length,
                                &signer_index,
                                header) != 0) {
-        THROW(ApduReplySolanaInvalidMessageHeader);
+        THROW(ApduReplyRenecInvalidMessageHeader);
     }
     print_config.signer_pubkey = &header->pubkeys[signer_index];
 
@@ -141,13 +141,13 @@ void handle_sign_message_ui(volatile unsigned int *flags) {
                 sendResponse(set_result_sign_message(), ApduReplySuccess, false);
             } else {
                 PRINTF("Refused signing incorrect Swap transaction\n");
-                sendResponse(0, ApduReplySolanaSummaryFinalizeFailed, false);
+                sendResponse(0, ApduReplyRenecSummaryFinalizeFailed, false);
             }
         } else {
             start_sign_tx_ui(num_summary_steps);
         }
     } else {
-        THROW(ApduReplySolanaSummaryFinalizeFailed);
+        THROW(ApduReplyRenecSummaryFinalizeFailed);
     }
 
     *flags |= IO_ASYNCH_REPLY;

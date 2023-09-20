@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "globals.h"
-#include "sol/parser.h"
+#include "renec/parser.h"
 
 typedef enum ApduState {
     ApduStateUninitialized = 0,
@@ -40,12 +40,12 @@ typedef enum ApduReply {
     ApduReplyNoApduReceived = 0x6982,
     ApduReplyUserRefusal = 0x6985,
 
-    ApduReplySolanaInvalidMessage = 0x6a80,
-    ApduReplySolanaInvalidMessageHeader = 0x6a81,
-    ApduReplySolanaInvalidMessageFormat = 0x6a82,
-    ApduReplySolanaInvalidMessageSize = 0x6a83,
-    ApduReplySolanaSummaryFinalizeFailed = 0x6f00,
-    ApduReplySolanaSummaryUpdateFailed = 0x6f01,
+    ApduReplyRenecInvalidMessage = 0x6a80,
+    ApduReplyRenecInvalidMessageHeader = 0x6a81,
+    ApduReplyRenecInvalidMessageFormat = 0x6a82,
+    ApduReplyRenecInvalidMessageSize = 0x6a83,
+    ApduReplyRenecSummaryFinalizeFailed = 0x6f00,
+    ApduReplyRenecSummaryUpdateFailed = 0x6f01,
 
     ApduReplyUnimplementedInstruction = 0x6d00,
     ApduReplyInvalidCla = 0x6e00,

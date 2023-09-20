@@ -2,11 +2,11 @@
 #include "swap_lib_calls.h"
 #include "swap_utils.h"
 #include "utils.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 
 /* return 0 on error, 1 otherwise */
 int handle_get_printable_amount(get_printable_amount_parameters_t* params) {
-    PRINTF("Inside Solana handle_get_printable_amount\n");
+    PRINTF("Inside RENEC handle_get_printable_amount\n");
     MEMCLEAR(params->printable_amount);
 
     // Fees are displayed normally

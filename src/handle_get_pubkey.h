@@ -3,7 +3,7 @@
 #include "os.h"
 #include "cx.h"
 #include "globals.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 
 extern char G_publicKeyStr[BASE58_PUBKEY_LENGTH];
 
