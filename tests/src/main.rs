@@ -17,7 +17,10 @@ use solana_sdk::{
     },
     system_instruction, system_program,
 };
-use solana_vote_program::{vote_instruction, vote_state};
+use solana_vote_program::{
+    vote_instruction::{self, CreateVoteAccountConfig},
+    vote_state,
+};
 use spl_associated_token_account::{
     get_associated_token_address, instruction::create_associated_token_account,
 };
@@ -234,10 +237,10 @@ fn test_ledger_delegate_stake_with_nonce() -> Result<(), RemoteWalletError> {
 
     let authorized_pubkey = ledger.get_pubkey(&derivation_path, false)?;
     let stake_pubkey = ledger_base_pubkey;
-    let vote_pubkey = Pubkey::new(&[1u8; 32]);
+    let vote_pubkey = Pubkey::from([1u8; 32]);
     let instruction =
         stake_instruction::delegate_stake(&stake_pubkey, &authorized_pubkey, &vote_pubkey);
-    let nonce_account = Pubkey::new(&[2u8; 32]);
+    let nonce_account = Pubkey::from([2u8; 32]);
     let message =
         Message::new_with_nonce(vec![instruction], None, &nonce_account, &authorized_pubkey)
             .serialize();
@@ -254,8 +257,8 @@ fn test_create_stake_account_and_delegate() -> Result<(), RemoteWalletError> {
     let from = ledger.get_pubkey(&derivation_path, false)?;
     let stake_account = ledger_base_pubkey;
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let mut instructions = stake_instruction::create_account(
         &from,
@@ -268,7 +271,7 @@ fn test_create_stake_account_and_delegate() -> Result<(), RemoteWalletError> {
         },
         42,
     );
-    let vote_pubkey = Pubkey::new(&[5u8; 32]);
+    let vote_pubkey = Pubkey::from([5u8; 32]);
     let instruction =
         stake_instruction::delegate_stake(&stake_account, &authorized.staker, &vote_pubkey);
     instructions.push(instruction);
@@ -288,8 +291,8 @@ fn test_create_stake_account_with_seed_and_delegate() -> Result<(), RemoteWallet
     let seed = "seedseedseedseedseedseedseedseed";
     let stake_account = Pubkey::create_with_seed(&base, seed, &solana_stake_program::id()).unwrap();
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let mut instructions = stake_instruction::create_account_with_seed(
         &from,
@@ -304,7 +307,7 @@ fn test_create_stake_account_with_seed_and_delegate() -> Result<(), RemoteWallet
         },
         42,
     );
-    let vote_pubkey = Pubkey::new(&[5u8; 32]);
+    let vote_pubkey = Pubkey::from([5u8; 32]);
     let instruction =
         stake_instruction::delegate_stake(&stake_account, &authorized.staker, &vote_pubkey);
     instructions.push(instruction);
@@ -321,7 +324,7 @@ fn test_ledger_advance_nonce_account() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
     let authorized_pubkey = ledger.get_pubkey(&derivation_path, false)?;
-    let nonce_account = Pubkey::new(&[1u8; 32]);
+    let nonce_account = Pubkey::from([1u8; 32]);
     let instruction = system_instruction::advance_nonce_account(&nonce_account, &authorized_pubkey);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
@@ -336,8 +339,8 @@ fn test_ledger_advance_nonce_account_separate_fee_payer() -> Result<(), RemoteWa
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
     let authorized_pubkey = ledger.get_pubkey(&derivation_path, false)?;
-    let nonce_account = Pubkey::new(&[1u8; 32]);
-    let fee_payer = Pubkey::new(&[2u8; 32]);
+    let nonce_account = Pubkey::from([1u8; 32]);
+    let fee_payer = Pubkey::from([2u8; 32]);
     let instruction = system_instruction::advance_nonce_account(&nonce_account, &authorized_pubkey);
     let message = Message::new(&[instruction], Some(&fee_payer)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
@@ -352,8 +355,8 @@ fn test_ledger_transfer_with_nonce() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
     let from = ledger.get_pubkey(&derivation_path, false)?;
-    let nonce_account = Pubkey::new(&[1u8; 32]);
-    let nonce_authority = Pubkey::new(&[2u8; 32]);
+    let nonce_account = Pubkey::from([1u8; 32]);
+    let nonce_authority = Pubkey::from([2u8; 32]);
     let instruction = system_instruction::transfer(&from, &ledger_base_pubkey, 42);
     let message =
         Message::new_with_nonce(vec![instruction], None, &nonce_account, &nonce_authority)
@@ -370,14 +373,14 @@ fn test_create_stake_account_with_seed_and_nonce() -> Result<(), RemoteWalletErr
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
     let from = ledger.get_pubkey(&derivation_path, false)?;
-    let nonce_account = Pubkey::new(&[1u8; 32]);
-    let nonce_authority = Pubkey::new(&[2u8; 32]);
+    let nonce_account = Pubkey::from([1u8; 32]);
+    let nonce_authority = Pubkey::from([2u8; 32]);
     let base = from;
     let seed = "seedseedseedseedseedseedseedseed";
     let stake_account = Pubkey::create_with_seed(&base, seed, &solana_stake_program::id()).unwrap();
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let instructions = stake_instruction::create_account_with_seed(
         &from,
@@ -404,8 +407,8 @@ fn test_create_stake_account() -> Result<(), RemoteWalletError> {
     let from = ledger.get_pubkey(&derivation_path, false)?;
     let stake_account = ledger_base_pubkey;
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let instructions = stake_instruction::create_account(
         &from,
@@ -432,8 +435,8 @@ fn test_create_stake_account_no_lockup() -> Result<(), RemoteWalletError> {
     let from = ledger.get_pubkey(&derivation_path, false)?;
     let stake_account = ledger_base_pubkey;
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let instructions = stake_instruction::create_account(
         &from,
@@ -457,8 +460,8 @@ fn test_create_stake_account_checked() -> Result<(), RemoteWalletError> {
     let from = ledger.get_pubkey(&derivation_path, false)?;
     let stake_account = ledger_base_pubkey;
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let instructions =
         stake_instruction::create_account_checked(&from, &stake_account, &authorized, 42);
@@ -475,14 +478,14 @@ fn test_create_stake_account_checked_with_seed_and_nonce() -> Result<(), RemoteW
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
     let from = ledger.get_pubkey(&derivation_path, false)?;
-    let nonce_account = Pubkey::new(&[1u8; 32]);
-    let nonce_authority = Pubkey::new(&[2u8; 32]);
+    let nonce_account = Pubkey::from([1u8; 32]);
+    let nonce_authority = Pubkey::from([2u8; 32]);
     let base = from;
     let seed = "seedseedseedseedseedseedseedseed";
     let stake_account = Pubkey::create_with_seed(&base, seed, &solana_stake_program::id()).unwrap();
     let authorized = stake_state::Authorized {
-        staker: Pubkey::new(&[3u8; 32]),
-        withdrawer: Pubkey::new(&[4u8; 32]),
+        staker: Pubkey::from([3u8; 32]),
+        withdrawer: Pubkey::from([4u8; 32]),
     };
     let instructions = stake_instruction::create_account_with_seed_checked(
         &from,
@@ -514,7 +517,7 @@ fn test_create_nonce_account_with_seed() -> Result<(), RemoteWalletError> {
         &nonce_account,
         &base,
         seed,
-        &Pubkey::new(&[1u8; 32]),
+        &Pubkey::from([1u8; 32]),
         42,
     );
     let message = Message::new(&instructions, Some(&ledger_base_pubkey)).serialize();
@@ -534,7 +537,7 @@ fn test_create_nonce_account() -> Result<(), RemoteWalletError> {
     let instructions = system_instruction::create_nonce_account(
         &from,
         &nonce_account,
-        &Pubkey::new(&[1u8; 32]),
+        &Pubkey::from([1u8; 32]),
         42,
     );
     let message = Message::new(&instructions, Some(&ledger_base_pubkey)).serialize();
@@ -551,7 +554,7 @@ fn test_sign_full_shred_of_garbage_tx() -> Result<(), RemoteWalletError> {
 
     let from = ledger.get_pubkey(&derivation_path, false)?;
 
-    let program_id = Pubkey::new(&[1u8; 32]);
+    let program_id = Pubkey::from([1u8; 32]);
     let mut data = [0u8; 1232 - 106].to_vec();
     let mut rng = StdRng::seed_from_u64(0);
     rng.fill_bytes(&mut data);
@@ -577,12 +580,18 @@ fn test_create_vote_account() -> Result<(), RemoteWalletError> {
     let from = ledger.get_pubkey(&derivation_path, false)?;
     let vote_account = ledger_base_pubkey;
     let vote_init = vote_state::VoteInit {
-        node_pubkey: Pubkey::new(&[1u8; 32]),
-        authorized_voter: Pubkey::new(&[2u8; 32]),
-        authorized_withdrawer: Pubkey::new(&[3u8; 32]),
+        node_pubkey: Pubkey::from([1u8; 32]),
+        authorized_voter: Pubkey::from([2u8; 32]),
+        authorized_withdrawer: Pubkey::from([3u8; 32]),
         commission: 50u8,
     };
-    let instructions = vote_instruction::create_account(&from, &vote_account, &vote_init, 42);
+    let instructions = vote_instruction::create_account_with_config(
+        &from,
+        &vote_account,
+        &vote_init,
+        42,
+        CreateVoteAccountConfig::default(),
+    );
     let message = Message::new(&instructions, Some(&ledger_base_pubkey)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
     assert!(signature.verify(from.as_ref(), &message));
@@ -600,18 +609,20 @@ fn test_create_vote_account_with_seed() -> Result<(), RemoteWalletError> {
     let seed = "seedseedseedseedseedseedseedseed";
     let vote_account = Pubkey::create_with_seed(&base, seed, &solana_vote_program::id()).unwrap();
     let vote_init = vote_state::VoteInit {
-        node_pubkey: Pubkey::new(&[1u8; 32]),
-        authorized_voter: Pubkey::new(&[2u8; 32]),
-        authorized_withdrawer: Pubkey::new(&[3u8; 32]),
+        node_pubkey: Pubkey::from([1u8; 32]),
+        authorized_voter: Pubkey::from([2u8; 32]),
+        authorized_withdrawer: Pubkey::from([3u8; 32]),
         commission: 50u8,
     };
-    let instructions = vote_instruction::create_account_with_seed(
+    let instructions = vote_instruction::create_account_with_config(
         &from,
         &vote_account,
-        &base,
-        seed,
         &vote_init,
         42,
+        CreateVoteAccountConfig {
+            with_seed: Some((&base, seed)),
+            space: CreateVoteAccountConfig::default().space,
+        },
     );
     let message = Message::new(&instructions, Some(&ledger_base_pubkey)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
@@ -627,7 +638,7 @@ fn test_nonce_withdraw() -> Result<(), RemoteWalletError> {
 
     let nonce_account = ledger_base_pubkey;
     let nonce_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let to = Pubkey::new(&[1u8; 32]);
+    let to = Pubkey::from([1u8; 32]);
     let instruction =
         system_instruction::withdraw_nonce_account(&nonce_account, &nonce_authority, &to, 42);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
@@ -644,7 +655,7 @@ fn test_stake_withdraw() -> Result<(), RemoteWalletError> {
 
     let stake_account = ledger_base_pubkey;
     let stake_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let to = Pubkey::new(&[1u8; 32]);
+    let to = Pubkey::from([1u8; 32]);
     let instruction = stake_instruction::withdraw(&stake_account, &stake_authority, &to, 42, None);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
@@ -660,7 +671,7 @@ fn test_vote_withdraw() -> Result<(), RemoteWalletError> {
 
     let vote_account = ledger_base_pubkey;
     let vote_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let to = Pubkey::new(&[1u8; 32]);
+    let to = Pubkey::from([1u8; 32]);
     let instruction = vote_instruction::withdraw(&vote_account, &vote_authority, 42, &to);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
     let signature = ledger.sign_message(&derivation_path, &message)?;
@@ -676,7 +687,7 @@ fn test_nonce_authorize() -> Result<(), RemoteWalletError> {
 
     let nonce_account = ledger_base_pubkey;
     let nonce_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_authority = Pubkey::new(&[1u8; 32]);
+    let new_authority = Pubkey::from([1u8; 32]);
     let instruction = system_instruction::authorize_nonce_account(
         &nonce_account,
         &nonce_authority,
@@ -696,7 +707,7 @@ fn test_stake_authorize() -> Result<(), RemoteWalletError> {
 
     let stake_account = ledger_base_pubkey;
     let stake_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_authority = Pubkey::new(&[1u8; 32]);
+    let new_authority = Pubkey::from([1u8; 32]);
     let stake_auth = stake_instruction::authorize(
         &stake_account,
         &stake_authority,
@@ -712,7 +723,7 @@ fn test_stake_authorize() -> Result<(), RemoteWalletError> {
 
     let custodian = Pubkey::new_unique();
     for maybe_custodian in &[None, Some(&custodian)] {
-        let new_authority = Pubkey::new(&[2u8; 32]);
+        let new_authority = Pubkey::from([2u8; 32]);
         let withdraw_auth = stake_instruction::authorize(
             &stake_account,
             &stake_authority,
@@ -747,7 +758,7 @@ fn test_stake_authorize_checked() -> Result<(), RemoteWalletError> {
 
     let stake_account = ledger_base_pubkey;
     let stake_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_authority = Pubkey::new(&[1u8; 32]);
+    let new_authority = Pubkey::from([1u8; 32]);
     let stake_auth = stake_instruction::authorize_checked(
         &stake_account,
         &stake_authority,
@@ -763,7 +774,7 @@ fn test_stake_authorize_checked() -> Result<(), RemoteWalletError> {
 
     let custodian = Pubkey::new_unique();
     for maybe_custodian in &[None, Some(&custodian)] {
-        let new_authority = Pubkey::new(&[2u8; 32]);
+        let new_authority = Pubkey::from([2u8; 32]);
         let withdraw_auth = stake_instruction::authorize_checked(
             &stake_account,
             &stake_authority,
@@ -798,7 +809,7 @@ fn test_vote_authorize() -> Result<(), RemoteWalletError> {
 
     let vote_account = ledger_base_pubkey;
     let vote_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_authority = Pubkey::new(&[1u8; 32]);
+    let new_authority = Pubkey::from([1u8; 32]);
     let vote_auth = vote_instruction::authorize(
         &vote_account,
         &vote_authority,
@@ -811,7 +822,7 @@ fn test_vote_authorize() -> Result<(), RemoteWalletError> {
     let signature = ledger.sign_message(&derivation_path, &message)?;
     assert!(signature.verify(vote_authority.as_ref(), &message));
 
-    let new_authority = Pubkey::new(&[2u8; 32]);
+    let new_authority = Pubkey::from([2u8; 32]);
     let withdraw_auth = vote_instruction::authorize(
         &vote_account,
         &vote_authority,
@@ -840,7 +851,7 @@ fn test_vote_authorize_checked() -> Result<(), RemoteWalletError> {
 
     let vote_account = ledger_base_pubkey;
     let vote_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_authority = Pubkey::new(&[1u8; 32]);
+    let new_authority = Pubkey::from([1u8; 32]);
     let vote_auth = vote_instruction::authorize_checked(
         &vote_account,
         &vote_authority,
@@ -853,7 +864,7 @@ fn test_vote_authorize_checked() -> Result<(), RemoteWalletError> {
     let signature = ledger.sign_message(&derivation_path, &message)?;
     assert!(signature.verify(vote_authority.as_ref(), &message));
 
-    let new_authority = Pubkey::new(&[2u8; 32]);
+    let new_authority = Pubkey::from([2u8; 32]);
     let withdraw_auth = vote_instruction::authorize_checked(
         &vote_account,
         &vote_authority,
@@ -882,7 +893,7 @@ fn test_vote_update_validator_identity() -> Result<(), RemoteWalletError> {
 
     let vote_account = ledger_base_pubkey;
     let vote_authority = ledger.get_pubkey(&derivation_path, false)?;
-    let new_node = Pubkey::new(&[1u8; 32]);
+    let new_node = Pubkey::from([1u8; 32]);
     let instruction =
         vote_instruction::update_validator_identity(&vote_account, &vote_authority, &new_node);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
@@ -931,7 +942,7 @@ fn test_stake_set_lockup() -> Result<(), RemoteWalletError> {
 
     let stake_account = ledger_base_pubkey;
     let stake_custodian = ledger.get_pubkey(&derivation_path, false)?;
-    let new_custodian = Pubkey::new(&[1u8; 32]);
+    let new_custodian = Pubkey::from([1u8; 32]);
     for maybe_new_custodian in &[None, Some(new_custodian)] {
         let lockup = stake_instruction::LockupArgs {
             unix_timestamp: Some(1),
@@ -954,7 +965,7 @@ fn test_stake_set_lockup_checked() -> Result<(), RemoteWalletError> {
 
     let stake_account = ledger_base_pubkey;
     let stake_custodian = ledger.get_pubkey(&derivation_path, false)?;
-    let new_custodian = Pubkey::new(&[1u8; 32]);
+    let new_custodian = Pubkey::from([1u8; 32]);
     for maybe_new_custodian in &[None, Some(new_custodian)] {
         let lockup = stake_instruction::LockupArgs {
             unix_timestamp: Some(1),
@@ -979,9 +990,9 @@ fn test_stake_split_with_nonce() -> Result<(), RemoteWalletError> {
 
     let stake_authority = ledger.get_pubkey(&derivation_path, false)?;
     let stake_account = ledger_base_pubkey;
-    let split_account = Pubkey::new(&[1u8; 32]);
-    let nonce_account = Pubkey::new(&[2u8; 32]);
-    let nonce_authority = Pubkey::new(&[3u8; 32]);
+    let split_account = Pubkey::from([1u8; 32]);
+    let nonce_account = Pubkey::from([2u8; 32]);
+    let nonce_authority = Pubkey::from([3u8; 32]);
     let instructions =
         stake_instruction::split(&stake_account, &stake_authority, 42, &split_account);
     let message =
@@ -1038,7 +1049,7 @@ fn test_ledger_reject_unexpected_signer() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
 
-    let from = Pubkey::new(&[1u8; 32]);
+    let from = Pubkey::from([1u8; 32]);
     let instruction = system_instruction::transfer(&from, &ledger_base_pubkey, 42);
     let message = Message::new(&[instruction], Some(&ledger_base_pubkey)).serialize();
     assert!(ledger.sign_message(&derivation_path, &message).is_err());
@@ -1050,7 +1061,7 @@ fn test_spl_token_create_mint() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let mint = Pubkey::new(&[1u8; 32]);
+    let mint = Pubkey::from([1u8; 32]);
 
     let instructions = vec![
         system_instruction::create_account(
@@ -1073,8 +1084,8 @@ fn test_spl_token_create_account() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
 
     let instructions = vec![
         system_instruction::create_account(
@@ -1098,8 +1109,8 @@ fn test_spl_token_create_account2() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
 
     let instructions = vec![
         system_instruction::create_account(
@@ -1123,11 +1134,11 @@ fn test_spl_token_create_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
     let signers = [
-        Pubkey::new(&[2u8; 32]),
-        Pubkey::new(&[3u8; 32]),
-        Pubkey::new(&[4u8; 32]),
+        Pubkey::from([2u8; 32]),
+        Pubkey::from([3u8; 32]),
+        Pubkey::from([4u8; 32]),
     ];
 
     let instructions = vec![
@@ -1157,8 +1168,8 @@ fn test_spl_token_transfer() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let sender = Pubkey::new(&[1u8; 32]);
-    let recipient = Pubkey::new(&[2u8; 32]);
+    let sender = Pubkey::from([1u8; 32]);
+    let recipient = Pubkey::from([2u8; 32]);
     let mint = spl_token::native_mint::id();
 
     let instruction = spl_token::instruction::transfer_checked(
@@ -1183,8 +1194,8 @@ fn test_spl_token_approve() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
-    let delegate = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let delegate = Pubkey::from([2u8; 32]);
     let mint = spl_token::native_mint::id();
 
     let instruction = spl_token::instruction::approve_checked(
@@ -1209,7 +1220,7 @@ fn test_spl_token_revoke() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
 
     let instruction =
         spl_token::instruction::revoke(&spl_token::id(), &account, &owner, &[]).unwrap();
@@ -1224,8 +1235,8 @@ fn test_spl_token_set_authority() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
-    let new_owner = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let new_owner = Pubkey::from([2u8; 32]);
 
     let instruction = spl_token::instruction::set_authority(
         &spl_token::id(),
@@ -1248,7 +1259,7 @@ fn test_spl_token_mint_to() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
     let mint = spl_token::native_mint::id();
-    let account = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
 
     let instruction = spl_token::instruction::mint_to_checked(
         &spl_token::id(),
@@ -1271,7 +1282,7 @@ fn test_spl_token_burn() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
     let mint = spl_token::native_mint::id();
 
     let instruction =
@@ -1288,8 +1299,8 @@ fn test_spl_token_close_account() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let owner = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
-    let destination = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let destination = Pubkey::from([2u8; 32]);
 
     let instruction = spl_token::instruction::close_account(
         &spl_token::id(),
@@ -1310,11 +1321,11 @@ fn test_spl_token_transfer_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let sender = Pubkey::new(&[2u8; 32]);
-    let recipient = Pubkey::new(&[3u8; 32]);
-    let mint = Pubkey::new(&[4u8; 32]); // Bad mint show symbol "???"
-    let signers = [Pubkey::new(&[5u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let sender = Pubkey::from([2u8; 32]);
+    let recipient = Pubkey::from([3u8; 32]);
+    let mint = Pubkey::from([4u8; 32]); // Bad mint show symbol "???"
+    let signers = [Pubkey::from([5u8; 32]), signer];
 
     let instruction = spl_token::instruction::transfer_checked(
         &spl_token::id(),
@@ -1338,11 +1349,11 @@ fn test_spl_token_approve_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let account = Pubkey::new(&[2u8; 32]);
-    let delegate = Pubkey::new(&[3u8; 32]);
-    let mint = Pubkey::new(&[4u8; 32]);
-    let signers = [Pubkey::new(&[5u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
+    let delegate = Pubkey::from([3u8; 32]);
+    let mint = Pubkey::from([4u8; 32]);
+    let signers = [Pubkey::from([5u8; 32]), signer];
 
     let instruction = spl_token::instruction::approve_checked(
         &spl_token::id(),
@@ -1366,9 +1377,9 @@ fn test_spl_token_revoke_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let account = Pubkey::new(&[2u8; 32]);
-    let signers = [Pubkey::new(&[3u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
+    let signers = [Pubkey::from([3u8; 32]), signer];
 
     let instruction = spl_token::instruction::revoke(
         &spl_token::id(),
@@ -1388,10 +1399,10 @@ fn test_spl_token_set_authority_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let account = Pubkey::new(&[2u8; 32]);
-    let new_owner = Pubkey::new(&[3u8; 32]);
-    let signers = [Pubkey::new(&[4u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
+    let new_owner = Pubkey::from([3u8; 32]);
+    let signers = [Pubkey::from([4u8; 32]), signer];
 
     let instruction = spl_token::instruction::set_authority(
         &spl_token::id(),
@@ -1413,10 +1424,10 @@ fn test_spl_token_mint_to_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
-    let account = Pubkey::new(&[3u8; 32]);
-    let signers = [Pubkey::new(&[4u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
+    let account = Pubkey::from([3u8; 32]);
+    let signers = [Pubkey::from([4u8; 32]), signer];
 
     let instruction = spl_token::instruction::mint_to_checked(
         &spl_token::id(),
@@ -1439,10 +1450,10 @@ fn test_spl_token_burn_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let account = Pubkey::new(&[2u8; 32]);
-    let signers = [Pubkey::new(&[3u8; 32]), signer];
-    let mint = Pubkey::new(&[4u8; 32]);
+    let owner = Pubkey::from([1u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
+    let signers = [Pubkey::from([3u8; 32]), signer];
+    let mint = Pubkey::from([4u8; 32]);
 
     let instruction = spl_token::instruction::burn_checked(
         &spl_token::id(),
@@ -1465,10 +1476,10 @@ fn test_spl_token_close_account_multisig() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let owner = Pubkey::new(&[1u8; 32]);
-    let account = Pubkey::new(&[2u8; 32]);
-    let destination = Pubkey::new(&[3u8; 32]);
-    let signers = [Pubkey::new(&[4u8; 32]), signer];
+    let owner = Pubkey::from([1u8; 32]);
+    let account = Pubkey::from([2u8; 32]);
+    let destination = Pubkey::from([3u8; 32]);
+    let signers = [Pubkey::from([4u8; 32]), signer];
 
     let instruction = spl_token::instruction::close_account(
         &spl_token::id(),
@@ -1490,8 +1501,8 @@ fn test_spl_token_freeze_account() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
     let freeze_auth = signer;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
 
     let instruction = spl_token::instruction::freeze_account(
         &spl_token::id(),
@@ -1513,9 +1524,9 @@ fn test_spl_token_freeze_account_multisig() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
     let freeze_auth = signer;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
-    let signers = [Pubkey::new(&[3u8; 32]), signer];
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
+    let signers = [Pubkey::from([3u8; 32]), signer];
 
     let instruction = spl_token::instruction::freeze_account(
         &spl_token::id(),
@@ -1537,8 +1548,8 @@ fn test_spl_token_thaw_account() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
     let thaw_auth = signer;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
 
     let instruction =
         spl_token::instruction::thaw_account(&spl_token::id(), &account, &mint, &thaw_auth, &[])
@@ -1555,9 +1566,9 @@ fn test_spl_token_thaw_account_multisig() -> Result<(), RemoteWalletError> {
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
     let thaw_auth = signer;
-    let account = Pubkey::new(&[1u8; 32]);
-    let mint = Pubkey::new(&[2u8; 32]);
-    let signers = [Pubkey::new(&[3u8; 32]), signer];
+    let account = Pubkey::from([1u8; 32]);
+    let mint = Pubkey::from([2u8; 32]);
+    let signers = [Pubkey::from([3u8; 32]), signer];
 
     let instruction = spl_token::instruction::thaw_account(
         &spl_token::id(),
@@ -1578,7 +1589,7 @@ fn test_spl_token_sync_native() -> Result<(), RemoteWalletError> {
 
     let derivation_path = DerivationPath::new_bip44(Some(12345), None);
     let signer = ledger.get_pubkey(&derivation_path, false)?;
-    let account = Pubkey::new(&[1u8; 32]);
+    let account = Pubkey::from([1u8; 32]);
 
     let instruction = spl_token::instruction::sync_native(&spl_token::id(), &account).unwrap();
     let message = Message::new(&[instruction], Some(&signer)).serialize();
@@ -1729,7 +1740,9 @@ fn main() {
         Err(e @ RemoteWalletError::LedgerError(LedgerError::UserCancel)) => {
             println!(" >>> {} <<<", e);
         }
-        Err(e) => Err(e).unwrap(),
+        Err(e) => {
+            println!(" >>> Remote Wallet Error {} <<<", e);
+        }
         Ok(()) => (),
     }
 }
