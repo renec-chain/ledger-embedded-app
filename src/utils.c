@@ -37,14 +37,17 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key_no_throw(HDW_ED25519_SLIP10,
-                                                CX_CURVE_Ed25519,
-                                                derivationPath,
-                                                pathLength,
-                                                privateKeyData,
-                                                NULL,
-                                                NULL,
-                                                0);
+            // Derive private key according to BIP32 path
+            os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                               CX_CURVE_Ed25519,
+                                               derivationPath,
+                                               pathLength,
+                                               privateKeyData,
+                                               NULL,
+                                               NULL,
+                                               0);
+
+            // Init privkey from raw
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                               privateKeyData,
                                               PRIVATEKEY_LENGTH,
@@ -65,13 +68,13 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key_no_throw(HDW_ED25519_SLIP10,
-                                                CX_CURVE_Ed25519,
-                                                derivationPath,
-                                                pathLength,
-                                                privateKeyData,
-                                                NULL,
-                                                (unsigned char *) "ed25519 seed",
+            os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                               CX_CURVE_Ed25519,
+                                               derivationPath,
+                                               pathLength,
+                                               privateKeyData,
+                                               NULL,
+                                               (unsigned char *) "ed25519 seed",
                                                 12);
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                               privateKeyData,
