@@ -1,80 +1,77 @@
-#pragma once
-
-// Standard libraries imports
-#include <stdbool.h>
-#include <stdint.h>
-
-// Ledger SDK imports
-#include <ux.h>
-#include <io.h>
-#include <os.h>
-#include <os_pic.h>
-#include <os_io_seproxyhal.h>
-
-#include "io.h"
-#include "types.h"
+#include "os.h"
+#include "ux.h"
+#include "os_io_seproxyhal.h"
 
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
-/**
- * 
- * Global variable with the length of APDU response to send back.
- * 
- */
-extern uint32_t G_output_len;
+#define CLA 0xE0
 
-/**
- * 
- * Global enumeration with the state of IO (READY, RECEIVED, WAITING).
- * 
- */
-extern io_state_e G_io_state;
+// header offsets
+#define OFFSET_CLA              0
+#define OFFSET_INS              1
+#define OFFSET_P1               2
+#define OFFSET_P2               3
+#define OFFSET_LC               4
+#define OFFSET_CDATA            5
+#define DEPRECATED_OFFSET_CDATA 6
 
-/**
- * 
- * Global context for user requests.
- * 
- */
-extern global_ctx_t G_context;
+#define P1_CONFIRM     0x01
+#define P1_NON_CONFIRM 0x00
 
-/**
- * 
- * It is called through the exchange app
- * 
- */
-extern bool G_called_from_swap;
+#define P2_EXTEND 0x01
+#define P2_MORE   0x02
 
-/**
- * Global buffer for interactions between SE and MCU.
- */
-// extern uint8_t G_io_seproxyhal_spi_buffer[IO_SEPROXYHAL_BUFFER_SIZE_B];
+#define ROUND_TO_NEXT(x, next) (((x) == 0) ? 0 : ((((x - 1) / (next)) + 1) * (next)))
 
-/**
- * 
- * Use an union to avoid the UI variable footprints for the swap flow and vice versa
- * 
- */
+/* See constant by same name in sdk/src/packet.rs */
+#define PACKET_DATA_SIZE (1280 - 40 - 8)
 
+#define MAX_BIP32_PATH_LENGTH             5
+#define MAX_DERIVATION_PATH_BUFFER_LENGTH (1 + MAX_BIP32_PATH_LENGTH * 4)
+#define TOTAL_SIGN_MESSAGE_BUFFER_LENGTH  (PACKET_DATA_SIZE + MAX_DERIVATION_PATH_BUFFER_LENGTH)
 
-/**
- * Global structure with the parameters to exchange with the BOLOS UX application.
- */
-extern bolos_ux_params_t G_ux_params;
+#define MAX_MESSAGE_LENGTH ROUND_TO_NEXT(TOTAL_SIGN_MESSAGE_BUFFER_LENGTH, USB_SEGMENT_SIZE)
+#define SIGNATURE_LENGTH   64
+#define HASH_LENGTH        32
+#define PUBKEY_LENGTH      HASH_LENGTH
+#define PRIVATEKEY_LENGTH  HASH_LENGTH
+
+#define MAX_OFFCHAIN_MESSAGE_LENGTH    (MAX_MESSAGE_LENGTH - 1 > 1212 ? 1212 : MAX_MESSAGE_LENGTH - 1)
+#define OFFCHAIN_MESSAGE_HEADER_LENGTH 20
+
+typedef enum InstructionCode {
+    // DEPRECATED - Use non "16" suffixed variants below
+    InsDeprecatedGetAppConfiguration = 0x01,
+    InsDeprecatedGetPubkey = 0x02,
+    InsDeprecatedSignMessage = 0x03,
+    // END DEPRECATED
+    InsGetAppConfiguration = 0x04,
+    InsGetPubkey = 0x05,
+    InsSignMessage = 0x06,
+    InsSignOffchainMessage = 0x07
+} InstructionCode;
+
+extern volatile bool G_called_from_swap;
+extern volatile bool G_swap_response_ready;
+
+// display stepped screens
+extern unsigned int ux_step;
+extern unsigned int ux_step_count;
 
 enum BlindSign {
-    BLIND_SIGN_DISABLED = 0,
-    BLIND_SIGN_ENABLED = 1,
+    BlindSignDisabled = 0,
+    BlindSignEnabled = 1,
 };
 
 enum PubkeyDisplay {
-    PUBKEY_DISPLAY_LONG = 0,
-    PUBKEY_DISPLAY_SHORT = 1,
+    PubkeyDisplayLong = 0,
+    PubkeyDisplayShort = 1,
 };
 
 enum DisplayMode {
-    DISPLAY_MODE_USER = 0,
-    DISPLAY_MODE_EXPERT = 1,
+    DisplayModeUser = 0,
+    DisplayModeExpert = 1,
 };
 
 typedef struct AppSettings {

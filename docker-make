@@ -9,7 +9,7 @@ if ! docker image inspect "$docker_image" &>/dev/null; then
 fi
 
 here="$(readlink -f "$(dirname "$0")")"
-source "$here"/utils/active-target.sh
+source "$here"/util/active-target.sh
 
 last_target_sdk="$(read_last_target_sdk_mnemonic "$here")"
 maybe_target_sdk="$(normalize_mnemonic "${1:-''}" false)"
@@ -18,21 +18,23 @@ if [[ -n "$maybe_target_sdk" ]]; then
 fi
 target_sdk="${maybe_target_sdk:-"$last_target_sdk"}"
 
-if [[ -z "$target_sdk" ]]; then
-  echo 'cannot resolve target sdk. please pass `s`, `x`, or `sp` as the first argument' 1>&2
-  exit 1
-elif [[ -z "$last_target_sdk" ]]; then
-  write_last_target_sdk_mnemonic "$here" "$target_sdk"
-elif [[ "$target_sdk" != "$last_target_sdk" ]]; then
-  echo "target_sdk change requested. please run \`$0 clean\` first" 1>&2
-  exit 1
-fi
+# if [[ -z "$target_sdk" ]]; then
+#   echo 'cannot resolve target sdk. please pass `s`, `x` or `sp` as the first argument' 1>&2
+#   exit 1
+# elif [[ -z "$last_target_sdk" ]]; then
+#   write_last_target_sdk_mnemonic "$here" "$target_sdk"
+# elif [[ "$target_sdk" != "$last_target_sdk" ]]; then
+#   echo "target_sdk change requested. please run \`$0 clean\` first" 1>&2
+#   exit 1
+# fi
 
 bolos_sdk_var="$(sdk_mnemonic_to_bolos_variable "$target_sdk")"
 
 user=$(id -u)
 group=$(id -g)
 owner="$user:$group"
+
+echo $container_script
 
 IFS='' read -r -d '' container_script <<EOF
 export "BOLOS_SDK=\$$bolos_sdk_var"

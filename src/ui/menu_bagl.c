@@ -1,12 +1,16 @@
 #ifdef HAVE_BAGL
 
-#include <ux.h>
-#include <ux_flow_engine.h>
-
-#include "glyphs.h"
-#include "ui.h"
+#include "ux.h"
+#include "os.h"
 #include "globals.h"
+#include "glyphs.h"
+#include "ui_api.h"
 
+void display_settings(void);
+void switch_allow_blind_sign_data(void);
+void switch_pubkey_display_data(void);
+
+//////////////////////////////////////////////////////////////////////
 static const char* settings_submenu_getter(unsigned int idx);
 static void settings_submenu_selector(unsigned int idx);
 static const char* allow_blind_sign_data_getter(unsigned int idx);
@@ -16,52 +20,15 @@ static void pubkey_display_data_selector(unsigned int idx);
 static const char* display_mode_data_getter(unsigned int idx);
 static void display_mode_data_selector(unsigned int idx);
 
-// void switch_settings_hash_signing();
-
-// // FLOW for the settings menu:
-// // #1 screen: enable hash signing
-// // #2 screen: quit
-// #if defined(TARGET_NANOS)
-// UX_STEP_CB(ux_settings_hash_signing_step,
-//            bnnn_paging,
-//            switch_settings_hash_signing(),
-//            {
-//                .title = "Hash signing",
-//                .text = G.ui.detail_value,
-//            });
-
-// #endif
-
-// // We have a screen with the icon and "RENEC is ready"
-// UX_STEP_NOCB(ux_menu_ready_step, pnn, {&C_icon_eye, "RENEC", "is ready"});
-// UX_STEP_NOCB(ux_menu_version_step, bn, {"Version", APPVERSION});
-// // UX_STEP_CB(ux_menu_settings_step, pb, display_settings(NULL), {&C_icon_coggle, "Settings"});
-// UX_STEP_VALID(ux_menu_exit_step, pb, os_sched_exit(-1), {&C_icon_dashboard_x, "Quit"});
-
-// // FLOW for the main menu:
-// // #1 screen: ready
-// // #2 screen: version of the app
-// // #3 screen: quit
-// UX_FLOW(ux_menu_main_flow,
-//         &ux_menu_ready_step,
-//         // &ux_menu_settings_step,
-//         &ux_menu_version_step,
-//         &ux_menu_exit_step,
-//         FLOW_LOOP);
-
-// void ui_menu_main(void) {
-//     if (G_ux.stack_count == 0) {
-//         ux_stack_push();
-//     }
-
-//     ux_flow_init(0, ux_menu_main_flow, NULL);
-// }
+//////////////////////////////////////////////////////////////////////////////////////
+// Settings menu:
 
 enum SettingsMenuOption {
     SettingsMenuOptionAllowBlindSign,
     SettingsMenuOptionPubkeyLength,
     SettingsMenuOptionDisplayMode,
-    SettingsMenuOptionBack,
+    // back must remain last
+    SettingsMenuOptionBack
 };
 
 static unsigned int settings_submenu_option_index(enum SettingsMenuOption settings_menu_option) {
@@ -98,34 +65,34 @@ static void settings_submenu_selector(unsigned int idx) {
                                     allow_blind_sign_data_selector,
                                     N_storage.settings.allow_blind_sign);
             break;
-        // case 1:
-        //     ux_menulist_init_select(0,
-        //                             pubkey_display_data_getter,
-        //                             pubkey_display_data_selector,
-        //                             N_storage.settings.pubkey_display);
-        //     break;
-        // case 2:
-        //     ux_menulist_init_select(0,
-        //                             display_mode_data_getter,
-        //                             display_mode_data_selector,
-        //                             N_storage.settings.display_mode);
-        //     break;
-    default:
-        ui_idle();
+        case 1:
+            ux_menulist_init_select(0,
+                                    pubkey_display_data_getter,
+                                    pubkey_display_data_selector,
+                                    N_storage.settings.pubkey_display);
+            break;
+        case 2:
+            ux_menulist_init_select(0,
+                                    display_mode_data_getter,
+                                    display_mode_data_selector,
+                                    N_storage.settings.display_mode);
+            break;
+        default:
+            ui_idle();
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Allow blind signing submenu
 
 static void allow_blind_sign_data_change(enum BlindSign blind_sign) {
     uint8_t value;
     switch (blind_sign) {
-        case BLIND_SIGN_DISABLED:
-        case BLIND_SIGN_ENABLED:
+        case BlindSignDisabled:
+        case BlindSignEnabled:
             value = (uint8_t) blind_sign;
-            nvm_write((void *) &N_storage.settings.allow_blind_sign, &value, sizeof(value));
+            nvm_write((void*) &N_storage.settings.allow_blind_sign, &value, sizeof(value));
             break;
-    
-    default:
-        break;
     }
 }
 
@@ -141,10 +108,10 @@ static const char* allow_blind_sign_data_getter(unsigned int idx) {
 static void allow_blind_sign_data_selector(unsigned int idx) {
     switch (idx) {
         case 0:
-            allow_blind_sign_data_change(BLIND_SIGN_DISABLED);
+            allow_blind_sign_data_change(BlindSignDisabled);
             break;
         case 1:
-            allow_blind_sign_data_change(BLIND_SIGN_ENABLED);
+            allow_blind_sign_data_change(BlindSignEnabled);
             break;
         default:
             break;
@@ -153,32 +120,110 @@ static void allow_blind_sign_data_selector(unsigned int idx) {
     ux_menulist_init_select(0, settings_submenu_getter, settings_submenu_selector, select_item);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////
+// Pubkey display submenu
+
+static void pubkey_display_data_change(enum PubkeyDisplay pubkey_display) {
+    uint8_t value;
+    switch (pubkey_display) {
+        case PubkeyDisplayLong:
+        case PubkeyDisplayShort:
+            value = (uint8_t) pubkey_display;
+            nvm_write((void*) &N_storage.settings.pubkey_display, &value, sizeof(value));
+            break;
+    }
+}
+
+const char* const pubkey_display_data_getter_values[] = {"Long", "Short", "Back"};
+
+static const char* pubkey_display_data_getter(unsigned int idx) {
+    if (idx < ARRAYLEN(pubkey_display_data_getter_values)) {
+        return pubkey_display_data_getter_values[idx];
+    }
+    return NULL;
+}
+
+static void pubkey_display_data_selector(unsigned int idx) {
+    switch (idx) {
+        case 0:
+            pubkey_display_data_change(PubkeyDisplayLong);
+            break;
+        case 1:
+            pubkey_display_data_change(PubkeyDisplayShort);
+            break;
+        default:
+            break;
+    }
+    unsigned int select_item = settings_submenu_option_index(SettingsMenuOptionPubkeyLength);
+    ux_menulist_init_select(0, settings_submenu_getter, settings_submenu_selector, select_item);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Display mode submenu
+
+static void display_mode_data_change(enum DisplayMode display_mode) {
+    uint8_t value;
+    switch (display_mode) {
+        case DisplayModeUser:
+        case DisplayModeExpert:
+            value = (uint8_t) display_mode;
+            nvm_write((void*) &N_storage.settings.display_mode, &value, sizeof(value));
+            break;
+    }
+}
+
+const char* const display_mode_data_getter_values[] = {"User", "Expert", "Back"};
+
+static const char* display_mode_data_getter(unsigned int idx) {
+    if (idx < ARRAYLEN(display_mode_data_getter_values)) {
+        return display_mode_data_getter_values[idx];
+    }
+    return NULL;
+}
+
+static void display_mode_data_selector(unsigned int idx) {
+    switch (idx) {
+        case 0:
+            display_mode_data_change(DisplayModeUser);
+            break;
+        case 1:
+            display_mode_data_change(DisplayModeExpert);
+            break;
+        default:
+            break;
+    }
+    unsigned int select_item = settings_submenu_option_index(SettingsMenuOptionDisplayMode);
+    ux_menulist_init_select(0, settings_submenu_getter, settings_submenu_selector, select_item);
+}
+
+//////////////////////////////////////////////////////////////////////
+
 UX_STEP_NOCB(ux_idle_flow_1_step,
              pnn,
              {
-                &C_icon_eye,
-                "RENEC",
-                "is ready",
+                 &C_icon_renec_16x16,
+                 "Application",
+                 "is ready",
              });
 UX_STEP_CB(ux_idle_flow_2_step,
            pb,
            ux_menulist_init(0, settings_submenu_getter, settings_submenu_selector),
            {
-                &C_icon_coggle,
-                "Settings",
+               &C_icon_coggle,
+               "Settings",
            });
 UX_STEP_NOCB(ux_idle_flow_3_step,
              bn,
              {
-                "Version",
-                APPVERSION,
+                 "Version",
+                 APPVERSION,
              });
 UX_STEP_CB(ux_idle_flow_4_step,
            pb,
            os_sched_exit(-1),
            {
-                &C_icon_dashboard_x,
-                "Quit",
+               &C_icon_dashboard_x,
+               "Quit",
            });
 UX_FLOW(ux_idle_flow,
         &ux_idle_flow_1_step,
@@ -186,6 +231,8 @@ UX_FLOW(ux_idle_flow,
         &ux_idle_flow_3_step,
         &ux_idle_flow_4_step,
         FLOW_LOOP);
+
+//////////////////////////////////////////////////////////////////////
 
 void ui_idle(void) {
     // reserve a display stack slot if none yet
@@ -195,4 +242,4 @@ void ui_idle(void) {
     ux_flow_init(0, ux_idle_flow, NULL);
 }
 
-#endif // HAVE_BAGL
+#endif
