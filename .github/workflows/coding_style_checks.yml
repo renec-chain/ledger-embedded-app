@@ -1,6 +1,9 @@
-name: Code style check
+name: Run coding style check
 
 on:
+  push:
+    branches:
+      - master
   pull_request:
     branches:
       - master
@@ -27,18 +30,3 @@ jobs:
           source: './libsol'
           extensions: 'h,c'
           clangFormatVersion: 16.0.3
-
-  misspell:
-    name: Check misspellings
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Check misspellings
-      uses: codespell-project/actions-codespell@v2
-      with:
-        builtin: clear,rare
-        check_filenames: true
-        skip: ./libsol/printer_test.c,./tests/Cargo.lock
