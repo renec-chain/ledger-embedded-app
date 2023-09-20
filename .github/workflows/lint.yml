@@ -1,13 +1,9 @@
 name: Code style check
 
 on:
-  workflow_dispatch:
-    push:
-      branches:
-        - master
-    pull_request:
-      branches:
-        - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   job_lint:
