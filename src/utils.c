@@ -34,24 +34,33 @@ uint32_t readUint32BE(uint8_t *buffer) {
 void get_private_key(cx_ecfp_private_key_t *privateKey,
                      const uint32_t *derivationPath,
                      size_t pathLength) {
+    cx_err_t error = CX_OK;
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
             // Derive private key according to BIP32 path
-            os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
-                                               CX_CURVE_Ed25519,
-                                               derivationPath,
-                                               pathLength,
-                                               privateKeyData,
-                                               NULL,
-                                               NULL,
-                                               0);
+            CX_CHECK(os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                                        CX_CURVE_Ed25519,
+                                                        derivationPath,
+                                                        pathLength,
+                                                        privateKeyData,
+                                                        NULL,
+                                                        NULL,
+                                                        0));
 
             // Init privkey from raw
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                               privateKeyData,
                                               PRIVATEKEY_LENGTH,
                                               privateKey);
+end:
+            explicit_bzero(privateKeyData, sizeof(privateKeyData));
+
+            if (error != CX_OK) {
+                // Make sure the caller doesn't use uninitialized data in case
+                // the return code is not checked.
+                explicit_bzero(privateKeyData, sizeof(cx_ecfp_256_private_key_t));
+            }
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
@@ -65,21 +74,31 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
 void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                const uint32_t *derivationPath,
                                uint8_t pathLength) {
+    cx_err_t error = CX_OK;
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
-                                               CX_CURVE_Ed25519,
-                                               derivationPath,
-                                               pathLength,
-                                               privateKeyData,
-                                               NULL,
-                                               (unsigned char *) "ed25519 seed",
-                                                12);
+            CX_CHECK(os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                                        CX_CURVE_Ed25519,
+                                                        derivationPath,
+                                                        pathLength,
+                                                        privateKeyData,
+                                                        NULL,
+                                                        (unsigned char *) "ed25519 seed",
+                                                        12));
+                                               
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                               privateKeyData,
                                               PRIVATEKEY_LENGTH,
                                               privateKey);
+end:
+            explicit_bzero(privateKeyData, sizeof(privateKeyData));
+
+            if (error != CX_OK) {
+                // Make sure the caller doesn't use uninitialized data in case
+                // the return code is not checked.
+                explicit_bzero(privateKeyData, sizeof(cx_ecfp_256_private_key_t));
+            }
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
