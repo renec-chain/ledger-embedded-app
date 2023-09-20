@@ -37,7 +37,7 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
+            os_perso_derive_node_bip32_seed_key_no_throw(HDW_ED25519_SLIP10,
                                                 CX_CURVE_Ed25519,
                                                 derivationPath,
                                                 pathLength,
@@ -65,7 +65,7 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
+            os_perso_derive_node_bip32_seed_key_no_throw(HDW_ED25519_SLIP10,
                                                 CX_CURVE_Ed25519,
                                                 derivationPath,
                                                 pathLength,

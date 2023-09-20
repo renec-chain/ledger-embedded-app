@@ -119,27 +119,27 @@ extern unsigned char const C_icon_right_bitmap[4];
 extern const bagl_icon_details_t C_icon_right;
 #endif  // GLYPH_icon_right_BPP
 #endif  // HAVE_BAGL
-#ifndef GLYPH_icon_solana_16x16_BPP
-#define GLYPH_icon_solana_16x16_WIDTH  16
-#define GLYPH_icon_solana_16x16_HEIGHT 16
-#define GLYPH_icon_solana_16x16_BPP    1
+#ifndef GLYPH_icon_renec_16x16_BPP
+#define GLYPH_icon_renec_16x16_WIDTH  16
+#define GLYPH_icon_renec_16x16_HEIGHT 16
+#define GLYPH_icon_renec_16x16_BPP    1
 extern unsigned int const C_icon_renec_16x16_colors[];
 extern unsigned char const C_icon_renec_16x16_bitmap[32];
 #ifdef HAVE_BAGL
 #include "bagl.h"
 extern const bagl_icon_details_t C_icon_renec_16x16;
-#endif  // GLYPH_icon_solana_16x16_BPP
+#endif  // GLYPH_icon_renec_16x16_BPP
 #endif  // HAVE_BAGL
-#ifndef GLYPH_icon_solana_64x64_BPP
-#define GLYPH_icon_solana_64x64_WIDTH  64
-#define GLYPH_icon_solana_64x64_HEIGHT 64
-#define GLYPH_icon_solana_64x64_BPP    1
+#ifndef GLYPH_icon_renec_64x64_BPP
+#define GLYPH_icon_renec_64x64_WIDTH  64
+#define GLYPH_icon_renec_64x64_HEIGHT 64
+#define GLYPH_icon_renec_64x64_BPP    1
 extern unsigned int const C_icon_renec_64x64_colors[];
 extern unsigned char const C_icon_renec_64x64_bitmap[512];
 #ifdef HAVE_BAGL
 #include "bagl.h"
 extern const bagl_icon_details_t C_icon_renec_64x64;
-#endif  // GLYPH_icon_solana_64x64_BPP
+#endif  // GLYPH_icon_renec_64x64_BPP
 #endif  // HAVE_BAGL
 #ifndef GLYPH_icon_up_BPP
 #define GLYPH_icon_up_WIDTH  7

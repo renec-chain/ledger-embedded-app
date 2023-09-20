@@ -169,4 +169,4 @@ include $(BOLOS_SDK)/Makefile.rules
 dep/%.d: %.c Makefile
 
 listvariants:
-	@echo VARIANTS COIN solana
+	@echo VARIANTS COIN renec

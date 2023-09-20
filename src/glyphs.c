@@ -214,8 +214,8 @@ unsigned char const C_icon_renec_16x16_bitmap[] = {
 };
 #ifdef HAVE_BAGL
 #include "bagl.h"
-const bagl_icon_details_t C_icon_renec_16x16 = {GLYPH_icon_solana_16x16_WIDTH,
-                                                GLYPH_icon_solana_16x16_HEIGHT,
+const bagl_icon_details_t C_icon_renec_16x16 = {GLYPH_icon_renec_16x16_WIDTH,
+                                                GLYPH_icon_renec_16x16_HEIGHT,
                                                 1,
                                                 C_icon_renec_16x16_colors,
                                                 C_icon_renec_16x16_bitmap};
@@ -262,8 +262,8 @@ unsigned char const C_icon_renec_64x64_bitmap[] = {
 };
 #ifdef HAVE_BAGL
 #include "bagl.h"
-const bagl_icon_details_t C_icon_renec_64x64 = {GLYPH_icon_solana_64x64_WIDTH,
-                                                GLYPH_icon_solana_64x64_HEIGHT,
+const bagl_icon_details_t C_icon_renec_64x64 = {GLYPH_icon_renec_64x64_WIDTH,
+                                                GLYPH_icon_renec_64x64_HEIGHT,
                                                 1,
                                                 C_icon_renec_64x64_colors,
                                                 C_icon_renec_64x64_bitmap};
