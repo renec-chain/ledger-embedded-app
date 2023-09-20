@@ -53,7 +53,7 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
                                               privateKeyData,
                                               PRIVATEKEY_LENGTH,
                                               privateKey);
-end:
+        end:
             explicit_bzero(privateKeyData, sizeof(privateKeyData));
 
             if (error != CX_OK) {
@@ -86,12 +86,12 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                                         NULL,
                                                         (unsigned char *) "ed25519 seed",
                                                         12));
-                                               
+
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                               privateKeyData,
                                               PRIVATEKEY_LENGTH,
                                               privateKey);
-end:
+        end:
             explicit_bzero(privateKeyData, sizeof(privateKeyData));
 
             if (error != CX_OK) {
