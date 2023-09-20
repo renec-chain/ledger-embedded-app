@@ -65,9 +65,7 @@ typedef struct OffchainMessageHeader {
     uint16_t length;
 } OffchainMessageHeader;
 
-static inline int parser_is_empty(Parser* parser) {
-    return parser->buffer_length == 0;
-}
+static inline int parser_is_empty(Parser* parser) { return parser->buffer_length == 0; }
 
 int parse_u8(Parser* parser, uint8_t* value);
 

@@ -128,9 +128,7 @@ void app_main(void) {
 
                 handleApdu(&flags, &tx, rx);
             }
-            CATCH(ApduReplySdkExceptionIoReset) {
-                THROW(ApduReplySdkExceptionIoReset);
-            }
+            CATCH(ApduReplySdkExceptionIoReset) { THROW(ApduReplySdkExceptionIoReset); }
             CATCH_OTHER(e) {
                 switch (e & 0xF000) {
                     case 0x6000:
@@ -153,8 +151,7 @@ void app_main(void) {
                 G_io_apdu_buffer[tx + 1] = sw;
                 tx += 2;
             }
-            FINALLY {
-            }
+            FINALLY {}
         }
         END_TRY;
     }
@@ -162,11 +159,8 @@ void app_main(void) {
 
 void app_exit(void) {
     BEGIN_TRY_L(exit) {
-        TRY_L(exit) {
-            os_sched_exit(-1);
-        }
-        FINALLY_L(exit) {
-        }
+        TRY_L(exit) { os_sched_exit(-1); }
+        FINALLY_L(exit) {}
     }
     END_TRY_L(exit);
 }
@@ -219,11 +213,8 @@ void coin_main(void) {
                 // reset IO and UX before continuing
                 continue;
             }
-            CATCH_ALL {
-                break;
-            }
-            FINALLY {
-            }
+            CATCH_ALL { break; }
+            FINALLY {}
         }
         END_TRY;
     }
@@ -286,9 +277,7 @@ static void library_main(libargs_t *args) {
                 }
                 os_lib_end();
             }
-            FINALLY {
-                end = true;
-            }
+            FINALLY { end = true; }
         }
         END_TRY;
     }

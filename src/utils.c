@@ -10,16 +10,12 @@ void get_public_key(uint8_t *publicKeyArray, const uint32_t *derivationPath, siz
 
     get_private_key(&privateKey, derivationPath, pathLength);
     BEGIN_TRY {
-        TRY {
-            cx_ecfp_generate_pair_no_throw(CX_CURVE_Ed25519, &publicKey, &privateKey, 1);
-        }
+        TRY { cx_ecfp_generate_pair_no_throw(CX_CURVE_Ed25519, &publicKey, &privateKey, 1); }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKey);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKey);
-        }
+        FINALLY { MEMCLEAR(privateKey); }
     }
     END_TRY;
 
@@ -50,17 +46,15 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
                                                 NULL,
                                                 0);
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
@@ -80,17 +74,15 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                                 (unsigned char *) "ed25519 seed",
                                                 12);
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
@@ -134,22 +126,15 @@ uint8_t set_result_sign_message(void) {
                                       G_command.derivation_path,
                                       G_command.derivation_path_length);
             cx_eddsa_sign_no_throw(&privateKey,
-                        //   CX_LAST,
-                          CX_SHA512,
-                          G_command.message,
-                          G_command.message_length,
-                        //   NULL,
-                        //   0,
-                          signature,
-                          SIGNATURE_LENGTH);
+                                   CX_SHA512,
+                                   G_command.message,
+                                   G_command.message_length,
+                                   signature,
+                                   SIGNATURE_LENGTH);
             memcpy(G_io_apdu_buffer, signature, SIGNATURE_LENGTH);
         }
-        CATCH_OTHER(e) {
-            THROW(e);
-        }
-        FINALLY {
-            MEMCLEAR(privateKey);
-        }
+        CATCH_OTHER(e) { THROW(e); }
+        FINALLY { MEMCLEAR(privateKey); }
     }
     END_TRY;
     return SIGNATURE_LENGTH;

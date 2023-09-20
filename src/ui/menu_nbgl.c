@@ -24,9 +24,7 @@
 #include "ui_api.h"
 #include "utils.h"
 
-static void quit_app_callback(void) {
-    os_sched_exit(-1);
-}
+static void quit_app_callback(void) { os_sched_exit(-1); }
 
 static const char* const info_types[] = {"Version", "Developer"};
 static const char* const info_contents[] = {APPVERSION, "Ledger"};
@@ -134,12 +132,7 @@ static void ui_menu_settings(void) {
 }
 
 void ui_idle(void) {
-    nbgl_useCaseHome(APPNAME,
-                     &C_icon_renec_64x64,
-                     NULL,
-                     true,
-                     ui_menu_settings,
-                     quit_app_callback);
+    nbgl_useCaseHome(APPNAME, &C_icon_renec_64x64, NULL, true, ui_menu_settings, quit_app_callback);
 }
 
 #endif
