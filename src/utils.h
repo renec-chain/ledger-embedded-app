@@ -9,9 +9,6 @@
 
 #define ARRAY_COUNT(array) (sizeof(array) / sizeof(array[0]))
 
-// Marker flag for DEPRECATED ADPU exchange format
-#define DATA_HAS_LENGTH_PREFIX (1 << 15)
-
 typedef enum rlpTxType {
     TX_LENGTH = 0,
     TX_TYPE,
@@ -66,7 +63,7 @@ uint8_t set_result_sign_message(void);
     } while (0)
 #define PRINTF(msg, arg) printf(msg, arg)
 #define PIC(code)        code
-//#define TARGET_NANOS 1
+// #define TARGET_NANOS 1
 #define TARGET_BLUE    1
 #define MEMCLEAR(dest) explicit_bzero(&dest, sizeof(dest));
 #else

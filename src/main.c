@@ -62,7 +62,6 @@ void handleApdu(volatile unsigned int *flags, volatile unsigned int *tx, int rx)
     }
 
     switch (G_command.instruction) {
-        case InsDeprecatedGetAppConfiguration:
         case InsGetAppConfiguration:
             G_io_apdu_buffer[0] = N_storage.settings.allow_blind_sign;
             G_io_apdu_buffer[1] = N_storage.settings.pubkey_display;
@@ -72,12 +71,10 @@ void handleApdu(volatile unsigned int *flags, volatile unsigned int *tx, int rx)
             *tx = 5;
             THROW(ApduReplySuccess);
 
-        case InsDeprecatedGetPubkey:
         case InsGetPubkey:
             handle_get_pubkey(flags, tx);
             break;
 
-        case InsDeprecatedSignMessage:
         case InsSignMessage:
             handle_sign_message_parse_message(tx);
             handle_sign_message_ui(flags);
@@ -128,9 +125,7 @@ void app_main(void) {
 
                 handleApdu(&flags, &tx, rx);
             }
-            CATCH(ApduReplySdkExceptionIoReset) {
-                THROW(ApduReplySdkExceptionIoReset);
-            }
+            CATCH(ApduReplySdkExceptionIoReset) { THROW(ApduReplySdkExceptionIoReset); }
             CATCH_OTHER(e) {
                 switch (e & 0xF000) {
                     case 0x6000:
@@ -153,8 +148,7 @@ void app_main(void) {
                 G_io_apdu_buffer[tx + 1] = sw;
                 tx += 2;
             }
-            FINALLY {
-            }
+            FINALLY {}
         }
         END_TRY;
     }
@@ -162,11 +156,8 @@ void app_main(void) {
 
 void app_exit(void) {
     BEGIN_TRY_L(exit) {
-        TRY_L(exit) {
-            os_sched_exit(-1);
-        }
-        FINALLY_L(exit) {
-        }
+        TRY_L(exit) { os_sched_exit(-1); }
+        FINALLY_L(exit) {}
     }
     END_TRY_L(exit);
 }
@@ -219,11 +210,8 @@ void coin_main(void) {
                 // reset IO and UX before continuing
                 continue;
             }
-            CATCH_ALL {
-                break;
-            }
-            FINALLY {
-            }
+            CATCH_ALL { break; }
+            FINALLY {}
         }
         END_TRY;
     }
@@ -286,9 +274,7 @@ static void library_main(libargs_t *args) {
                 }
                 os_lib_end();
             }
-            FINALLY {
-                end = true;
-            }
+            FINALLY { end = true; }
         }
         END_TRY;
     }

@@ -3,7 +3,7 @@
 #include "os.h"
 #include "swap_lib_calls.h"
 #include "swap_utils.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 
 typedef struct swap_validated_s {
     bool initialized;

@@ -3,7 +3,7 @@
 #include "handle_check_address.h"
 #include "os.h"
 #include "utils.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 
 static int derive_public_key(const uint8_t *buffer,
                              uint16_t buffer_length,
@@ -24,7 +24,7 @@ static int derive_public_key(const uint8_t *buffer,
 }
 
 int handle_check_address(const check_address_parameters_t *params) {
-    PRINTF("Inside Solana handle_check_address\n");
+    PRINTF("Inside RENEC handle_check_address\n");
     PRINTF("Params on the address %d\n", (unsigned int) params);
 
     if (params->coin_configuration != NULL || params->coin_configuration_length != 0) {

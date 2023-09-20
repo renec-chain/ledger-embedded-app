@@ -8,13 +8,12 @@
 #define CLA 0xE0
 
 // header offsets
-#define OFFSET_CLA              0
-#define OFFSET_INS              1
-#define OFFSET_P1               2
-#define OFFSET_P2               3
-#define OFFSET_LC               4
-#define OFFSET_CDATA            5
-#define DEPRECATED_OFFSET_CDATA 6
+#define OFFSET_CLA   0
+#define OFFSET_INS   1
+#define OFFSET_P1    2
+#define OFFSET_P2    3
+#define OFFSET_LC    4
+#define OFFSET_CDATA 5
 
 #define P1_CONFIRM     0x01
 #define P1_NON_CONFIRM 0x00
@@ -35,21 +34,16 @@
 #define SIGNATURE_LENGTH   64
 #define HASH_LENGTH        32
 #define PUBKEY_LENGTH      HASH_LENGTH
-#define PRIVATEKEY_LENGTH  HASH_LENGTH
+#define PRIVATEKEY_LENGTH  64
 
 #define MAX_OFFCHAIN_MESSAGE_LENGTH    (MAX_MESSAGE_LENGTH - 1 > 1212 ? 1212 : MAX_MESSAGE_LENGTH - 1)
 #define OFFCHAIN_MESSAGE_HEADER_LENGTH 20
 
 typedef enum InstructionCode {
-    // DEPRECATED - Use non "16" suffixed variants below
-    InsDeprecatedGetAppConfiguration = 0x01,
-    InsDeprecatedGetPubkey = 0x02,
-    InsDeprecatedSignMessage = 0x03,
-    // END DEPRECATED
-    InsGetAppConfiguration = 0x04,
-    InsGetPubkey = 0x05,
-    InsSignMessage = 0x06,
-    InsSignOffchainMessage = 0x07
+    InsGetAppConfiguration = 0x01,
+    InsGetPubkey = 0x02,
+    InsSignMessage = 0x03,
+    InsSignOffchainMessage = 0x04
 } InstructionCode;
 
 extern volatile bool G_called_from_swap;
@@ -86,5 +80,5 @@ typedef struct internalStorage_t {
 } internalStorage_t;
 
 extern const internalStorage_t N_storage_real;
-#define N_storage (*(volatile internalStorage_t*) PIC(&N_storage_real))
+#define N_storage (*(volatile internalStorage_t *) PIC(&N_storage_real))
 #endif

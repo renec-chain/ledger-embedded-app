@@ -10,16 +10,12 @@ void get_public_key(uint8_t *publicKeyArray, const uint32_t *derivationPath, siz
 
     get_private_key(&privateKey, derivationPath, pathLength);
     BEGIN_TRY {
-        TRY {
-            cx_ecfp_generate_pair_no_throw(CX_CURVE_Ed25519, &publicKey, &privateKey, 1);
-        }
+        TRY { cx_ecfp_generate_pair_no_throw(CX_CURVE_Ed25519, &publicKey, &privateKey, 1); }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKey);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKey);
-        }
+        FINALLY { MEMCLEAR(privateKey); }
     }
     END_TRY;
 
@@ -38,29 +34,39 @@ uint32_t readUint32BE(uint8_t *buffer) {
 void get_private_key(cx_ecfp_private_key_t *privateKey,
                      const uint32_t *derivationPath,
                      size_t pathLength) {
+    cx_err_t error = CX_OK;
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
-                                                CX_CURVE_Ed25519,
-                                                derivationPath,
-                                                pathLength,
-                                                privateKeyData,
-                                                NULL,
-                                                NULL,
-                                                0);
+            // Derive private key according to BIP32 path
+            CX_CHECK(os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                                        CX_CURVE_Ed25519,
+                                                        derivationPath,
+                                                        pathLength,
+                                                        privateKeyData,
+                                                        NULL,
+                                                        NULL,
+                                                        0));
+
+            // Init privkey from raw
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
+        end:
+            explicit_bzero(privateKeyData, sizeof(privateKeyData));
+
+            if (error != CX_OK) {
+                // Make sure the caller doesn't use uninitialized data in case
+                // the return code is not checked.
+                explicit_bzero(privateKeyData, sizeof(cx_ecfp_256_private_key_t));
+            }
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
@@ -68,29 +74,37 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
 void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                const uint32_t *derivationPath,
                                uint8_t pathLength) {
+    cx_err_t error = CX_OK;
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
-            os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
-                                                CX_CURVE_Ed25519,
-                                                derivationPath,
-                                                pathLength,
-                                                privateKeyData,
-                                                NULL,
-                                                (unsigned char *) "ed25519 seed",
-                                                12);
+            CX_CHECK(os_derive_bip32_with_seed_no_throw(HDW_ED25519_SLIP10,
+                                                        CX_CURVE_Ed25519,
+                                                        derivationPath,
+                                                        pathLength,
+                                                        privateKeyData,
+                                                        NULL,
+                                                        (unsigned char *) "ed25519 seed",
+                                                        12));
+
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
+        end:
+            explicit_bzero(privateKeyData, sizeof(privateKeyData));
+
+            if (error != CX_OK) {
+                // Make sure the caller doesn't use uninitialized data in case
+                // the return code is not checked.
+                explicit_bzero(privateKeyData, sizeof(cx_ecfp_256_private_key_t));
+            }
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
@@ -103,15 +117,15 @@ int read_derivation_path(const uint8_t *data_buffer,
         return ApduReplySdkInvalidParameter;
     }
     if (!data_size) {
-        return ApduReplySolanaInvalidMessageSize;
+        return ApduReplyRenecInvalidMessageSize;
     }
     const size_t len = data_buffer[0];
     data_buffer += 1;
     if (len < 1 || len > MAX_BIP32_PATH_LENGTH) {
-        return ApduReplySolanaInvalidMessage;
+        return ApduReplyRenecInvalidMessage;
     }
     if (1 + 4 * len > data_size) {
-        return ApduReplySolanaInvalidMessageSize;
+        return ApduReplyRenecInvalidMessageSize;
     }
 
     for (size_t i = 0; i < len; i++) {
@@ -134,22 +148,15 @@ uint8_t set_result_sign_message(void) {
                                       G_command.derivation_path,
                                       G_command.derivation_path_length);
             cx_eddsa_sign_no_throw(&privateKey,
-                        //   CX_LAST,
-                          CX_SHA512,
-                          G_command.message,
-                          G_command.message_length,
-                        //   NULL,
-                        //   0,
-                          signature,
-                          SIGNATURE_LENGTH);
+                                   CX_SHA512,
+                                   G_command.message,
+                                   G_command.message_length,
+                                   signature,
+                                   SIGNATURE_LENGTH);
             memcpy(G_io_apdu_buffer, signature, SIGNATURE_LENGTH);
         }
-        CATCH_OTHER(e) {
-            THROW(e);
-        }
-        FINALLY {
-            MEMCLEAR(privateKey);
-        }
+        CATCH_OTHER(e) { THROW(e); }
+        FINALLY { MEMCLEAR(privateKey); }
     }
     END_TRY;
     return SIGNATURE_LENGTH;

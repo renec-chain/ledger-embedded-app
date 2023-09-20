@@ -3,11 +3,11 @@
 #include "ux.h"
 #include "cx.h"
 #include "utils.h"
-#include "sol/parser.h"
-#include "sol/printer.h"
-#include "sol/print_config.h"
-#include "sol/message.h"
-#include "sol/transaction_summary.h"
+#include "renec/parser.h"
+#include "renec/printer.h"
+#include "renec/print_config.h"
+#include "renec/message.h"
+#include "renec/transaction_summary.h"
 #include "globals.h"
 #include "apdu.h"
 #include "handle_sign_offchain_message.h"
@@ -100,13 +100,13 @@ void handle_sign_offchain_message(volatile unsigned int *flags, volatile unsigne
     Parser parser = {G_command.message, G_command.message_length};
     OffchainMessageHeader header;
     if (parse_offchain_message_header(&parser, &header)) {
-        THROW(ApduReplySolanaInvalidMessageHeader);
+        THROW(ApduReplyRenecInvalidMessageHeader);
     }
 
     // validate message
     if (header.version != 0 || header.format > 1 || header.length > MAX_OFFCHAIN_MESSAGE_LENGTH ||
         header.length + OFFCHAIN_MESSAGE_HEADER_LENGTH != G_command.message_length) {
-        THROW(ApduReplySolanaInvalidMessageHeader);
+        THROW(ApduReplyRenecInvalidMessageHeader);
     }
     const bool is_ascii =
         is_data_ascii(G_command.message + OFFCHAIN_MESSAGE_HEADER_LENGTH, header.length);
@@ -114,7 +114,7 @@ void handle_sign_offchain_message(volatile unsigned int *flags, volatile unsigne
         is_ascii ? true
                  : is_data_utf8(G_command.message + OFFCHAIN_MESSAGE_HEADER_LENGTH, header.length);
     if (!is_ascii && (!is_utf8 || header.format == 0)) {
-        THROW(ApduReplySolanaInvalidMessageFormat);
+        THROW(ApduReplyRenecInvalidMessageFormat);
     } else if (!is_ascii && N_storage.settings.allow_blind_sign != BlindSignEnabled) {
         THROW(ApduReplySdkNotSupported);
     }
@@ -149,7 +149,7 @@ void handle_sign_offchain_message(volatile unsigned int *flags, volatile unsigne
     enum SummaryItemKind summary_step_kinds[MAX_TRANSACTION_SUMMARY_ITEMS];
     size_t num_summary_steps = 0;
     if (transaction_summary_finalize(summary_step_kinds, &num_summary_steps)) {
-        THROW(ApduReplySolanaSummaryFinalizeFailed);
+        THROW(ApduReplyRenecSummaryFinalizeFailed);
     }
 
     start_sign_offchain_message_ui(is_ascii, num_summary_steps);

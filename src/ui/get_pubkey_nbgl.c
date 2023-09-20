@@ -20,7 +20,7 @@
 
 #include "handle_get_pubkey.h"
 #include "io.h"
-#include "sol/printer.h"
+#include "renec/printer.h"
 #include "nbgl_use_case.h"
 #include "ui_api.h"
 #include "apdu.h"
@@ -51,7 +51,7 @@ static void continue_review(void) {
 
 void ui_get_public_key(void) {
     nbgl_useCaseReviewStart(&C_icon_renec_64x64,
-                            "Verify Solana\naddress",
+                            "Verify RENEC\naddress",
                             NULL,
                             "Cancel",
                             continue_review,

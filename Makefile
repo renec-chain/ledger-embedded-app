@@ -142,14 +142,14 @@ endif
 WITH_U2F=0
 ifneq ($(WITH_U2F),0)
     DEFINES         += HAVE_U2F HAVE_IO_U2F
-    DEFINES         += U2F_PROXY_MAGIC=\"~SOL\"
+    DEFINES         += U2F_PROXY_MAGIC=\"~RENEC\"
 		SDK_SOURCE_PATH += lib_u2f
 endif
 
-WITH_LIBSOL=1
-ifneq ($(WITH_LIBSOL),0)
-    SOURCE_FILES += $(filter-out %_test.c,$(wildcard libsol/*.c))
-    CFLAGS       += -Ilibsol/include
+WITH_LIBRENEC=1
+ifneq ($(WITH_LIBRENEC),0)
+    SOURCE_FILES += $(filter-out %_test.c,$(wildcard librenec/*.c))
+    CFLAGS       += -Ilibrenec/include
     DEFINES      += HAVE_SNPRINTF_FORMAT_U
     DEFINES      += NDEBUG
 endif
@@ -169,4 +169,4 @@ include $(BOLOS_SDK)/Makefile.rules
 dep/%.d: %.c Makefile
 
 listvariants:
-	@echo VARIANTS COIN solana
+	@echo VARIANTS COIN renec

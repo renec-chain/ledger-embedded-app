@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "globals.h"
-#include "sol/parser.h"
+#include "renec/parser.h"
 
 typedef enum ApduState {
     ApduStateUninitialized = 0,
@@ -40,12 +40,12 @@ typedef enum ApduReply {
     ApduReplyNoApduReceived = 0x6982,
     ApduReplyUserRefusal = 0x6985,
 
-    ApduReplySolanaInvalidMessage = 0x6a80,
-    ApduReplySolanaInvalidMessageHeader = 0x6a81,
-    ApduReplySolanaInvalidMessageFormat = 0x6a82,
-    ApduReplySolanaInvalidMessageSize = 0x6a83,
-    ApduReplySolanaSummaryFinalizeFailed = 0x6f00,
-    ApduReplySolanaSummaryUpdateFailed = 0x6f01,
+    ApduReplyRenecInvalidMessage = 0x6a80,
+    ApduReplyRenecInvalidMessageHeader = 0x6a81,
+    ApduReplyRenecInvalidMessageFormat = 0x6a82,
+    ApduReplyRenecInvalidMessageSize = 0x6a83,
+    ApduReplyRenecSummaryFinalizeFailed = 0x6f00,
+    ApduReplyRenecSummaryUpdateFailed = 0x6f01,
 
     ApduReplyUnimplementedInstruction = 0x6d00,
     ApduReplyInvalidCla = 0x6e00,
@@ -60,7 +60,6 @@ typedef struct ApduHeader {
     uint8_t p2;
     const uint8_t* data;
     size_t data_length;
-    bool deprecated_host;
 } ApduHeader;
 
 typedef struct ApduCommand {
@@ -70,7 +69,6 @@ typedef struct ApduCommand {
     uint32_t derivation_path[MAX_BIP32_PATH_LENGTH];
     uint32_t derivation_path_length;
     bool non_confirm;
-    bool deprecated_host;
     uint8_t message[MAX_MESSAGE_LENGTH];
     int message_length;
     Hash message_hash;
