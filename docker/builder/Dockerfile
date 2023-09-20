@@ -4,21 +4,21 @@ ENV LANG C.UTF-8
 RUN apk update
 RUN apk upgrade
 RUN apk add \
-        bash \
-        clang \
-        clang-analyzer \
-        clang-extra-tools \
-        cmake \
-        cmocka-dev \
-        doxygen \
-        gcc-arm-none-eabi \
-        git \
-        lld \
-        make \
-        musl-dev \
-        newlib-arm-none-eabi \
-        protoc \
-        python3
+    bash \
+    clang \
+    clang-analyzer \
+    clang-extra-tools \
+    cmake \
+    cmocka-dev \
+    doxygen \
+    gcc-arm-none-eabi \
+    git \
+    lld \
+    make \
+    musl-dev \
+    newlib-arm-none-eabi \
+    protoc \
+    python3
 
 # Install pip and wheel
 RUN python3 -m ensurepip --upgrade \
@@ -36,10 +36,10 @@ RUN apk add gzip
 
 # These packages contain shared libraries which will be needed at runtime
 RUN apk add \
-        eudev \
-        libjpeg \
-        libusb \
-        zlib
+    eudev \
+    libjpeg \
+    libusb \
+    zlib
 
 # Python packages building dependencies, can be removed afterwards
 ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zlib-dev
@@ -105,7 +105,7 @@ RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 WORKDIR /app
 
-# Workaround the git security to be able to get informations from repositories
+# Workaround the git security to be able to get information from repositories
 # even if the container is not run with root UID/GID
 RUN git config --system --add safe.directory "*"
 
