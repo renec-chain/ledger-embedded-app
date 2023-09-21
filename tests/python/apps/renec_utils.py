@@ -9,8 +9,8 @@ ROOT_SCREENSHOT_PATH = Path(__file__).parent.parent.resolve()
 
 ### Some utilities functions for amounts conversions ###
 
-def sol_to_lamports(sol_amount: int) -> int:
-    return round(sol_amount * 10**9)
+def renec_to_lamports(renec_amount: int) -> int:
+    return round(renec_amount * 10**9)
 
 
 def lamports_to_bytes(lamports: int) -> str:
@@ -22,13 +22,13 @@ def lamports_to_bytes(lamports: int) -> str:
 
 ### Proposed values for fees and amounts ###
 
-AMOUNT          = sol_to_lamports(2.078)
+AMOUNT          = renec_to_lamports(2.078)
 AMOUNT_BYTES    = lamports_to_bytes(AMOUNT)
 
-AMOUNT_2        = sol_to_lamports(101.000001234)
+AMOUNT_2        = renec_to_lamports(101.000001234)
 AMOUNT_2_BYTES  = lamports_to_bytes(AMOUNT_2)
 
-FEES            = sol_to_lamports(0.00000564)
+FEES            = renec_to_lamports(0.00000564)
 FEES_BYTES      = lamports_to_bytes(FEES)
 
 
@@ -49,13 +49,13 @@ OWNED_PUBLIC_KEY    = base58.b58decode(OWNED_ADDRESS)
 
 ### Proposed RENEC derivation paths for tests ###
 
-SOL_PACKED_DERIVATION_PATH      = pack_derivation_path("m/44'/501'/12345'")
-SOL_PACKED_DERIVATION_PATH_2    = pack_derivation_path("m/44'/501'/0'/0'")
+RENEC_PACKED_DERIVATION_PATH      = pack_derivation_path("m/44'/501'/12345'")
+RENEC_PACKED_DERIVATION_PATH_2    = pack_derivation_path("m/44'/501'/0'/0'")
 
 
 ### Package this currency configuration in exchange format ###
 
-SOL_CONF = create_currency_config("RENEC", "RENEC")
+RENEC_CONF = create_currency_config("RENEC", "RENEC")
 
 
 def enable_blind_signing(navigator, device_name: str, snapshots_name: str):

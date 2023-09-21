@@ -65,7 +65,7 @@ def _extend_and_serialize_multiple_derivations_paths(derivations_paths: List[byt
     return serialized
 
 
-class SolanaClient:
+class RenecClient:
     client: BackendInterface
 
     def __init__(self, client: BackendInterface):

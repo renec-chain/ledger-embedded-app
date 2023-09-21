@@ -132,7 +132,7 @@ U16_MAX = 2^16-1
 
 
 SIGNING_DOMAIN: bytes = b"\xffrenec offchain"
-# // Header Length = Signing Domain (16) + Header Version (1)
+# Header Length = Signing Domain (16) + Header Version (1)
 BASE_HEADER_LEN: int = len(SIGNING_DOMAIN) + 1;
 
 # Header Length = Message Format (1) + Message Length (2)
@@ -152,7 +152,6 @@ class v0_OffchainMessage:
     message: bytes
 
     def __init__(self, message: bytes):
-        # /// Construct a new OffchainMessage object from the given message
         if len(message) <= MAX_LEN_LEDGER:
             if is_printable_ascii(message):
                 self.format = MessageFormat.RestrictedAscii
