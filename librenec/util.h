@@ -9,6 +9,8 @@
     } while (0)
 #define MIN(a, b) ((a) < (b) ? (a) : (b));
 
+void explicit_bzero(void *s, size_t n);
+
 #define assert_string_equal(actual, expected) assert(strcmp(actual, expected) == 0)
 
 #define assert_pubkey_equal(actual, expected) assert(memcmp(actual, expected, 32) == 0)

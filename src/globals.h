@@ -40,10 +40,10 @@
 #define OFFCHAIN_MESSAGE_HEADER_LENGTH 20
 
 typedef enum InstructionCode {
-    InsGetAppConfiguration = 0x01,
-    InsGetPubkey = 0x02,
-    InsSignMessage = 0x03,
-    InsSignOffchainMessage = 0x04
+    InsGetAppConfiguration = 0x03,
+    InsGetPubkey = 0x04,
+    InsSignMessage = 0x05,
+    InsSignOffchainMessage = 0x06
 } InstructionCode;
 
 extern volatile bool G_called_from_swap;

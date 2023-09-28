@@ -8,3 +8,6 @@ __pycache__
 .egg
 .pyc
 librenec/target
+*venv
+.pytest_cache
+**/snapshots-tmp

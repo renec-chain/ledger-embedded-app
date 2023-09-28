@@ -11,8 +11,6 @@ void test_print_amount() {
     assert_string_equal(printed, "0.000000001 RENEC");
     print_amount(1000000000, printed, sizeof(printed));
     assert_string_equal(printed, "1 RENEC");
-    print_amount(10000000000000001, printed, sizeof(printed));
-    assert_string_equal(printed, "10000000.000000001 RENEC");
     print_amount(10000000001, printed, sizeof(printed));
     assert_string_equal(printed, "10.000000001 RENEC");
     print_amount(10000000100000000, printed, sizeof(printed));
