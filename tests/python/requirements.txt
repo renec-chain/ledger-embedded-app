@@ -1,2 +1,0 @@
-base58
-ragger[tests,speculos]

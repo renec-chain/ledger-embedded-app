@@ -1,9 +1,14 @@
 .git
+.github
+.pytest_cache
 .vscode
 docker
+docs
 obj
+venv
 .clang-format
 .gitignore
 docker-make
+Dockerfile
 LICENSE
 README.md
