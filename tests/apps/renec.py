@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from enum import IntEnum
 
-from ragger.backend.interface import BackendInterface, RAPDU
+from ragger.backend.interface import RAPDU, BackendInterface
 
 CLA: int = 0xE0
 
@@ -70,7 +70,8 @@ class RenecClient:
                                                   P1.P1_NON_CONFIRM, P2.P2_NONE,
                                                   derivation_path)
         
-        assert len(public_key.data) == PUBLIC_KEY_LENGTH, "'from' public key size incorrect"
+        assert len(public_key.data) == PUBLIC_KEY_LENGTH, \
+            "'from' public key size incorrect"
         return public_key.data
     
     @contextmanager
