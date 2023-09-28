@@ -109,15 +109,15 @@ class RenecClient:
                                 ins: INS,
                                 derivation_path: bytes,
                                 message: bytes) -> Generator[None, None, None]:
-        message_splited_prefixed = self._split_and_prefix_message(derivation_path, 
+        message_split_prefixed = self._split_and_prefix_message(derivation_path, 
                                                                  message)
         
         # Send all chunks with P2_MORE except for the last chunk
         # Send all chunks with P2_EXTEND except for the first chunk
-        if len(message_splited_prefixed) > 1:
+        if len(message_split_prefixed) > 1:
             final_p2 = P2.P2_EXTEND
             self._send_first_message_batch(ins, 
-                                           message_splited_prefixed[:-1], 
+                                           message_split_prefixed[:-1], 
                                            P1.P1_CONFIRM)
         else:
             final_p2 = 0
@@ -126,7 +126,7 @@ class RenecClient:
                                          ins,
                                          P1.P1_CONFIRM,
                                          final_p2,
-                                         message_splited_prefixed[-1]):
+                                         message_split_prefixed[-1]):
             yield
     
     def get_async_response(self) -> Optional[RAPDU]:
@@ -145,12 +145,12 @@ class RenecClient:
                                   message: bytes) -> List[bytes]:
         assert len(message) <= 65535, "Message to send is too long"
         header = self._extend_and_serialize_multiple_derivation_paths([derivation_path])
-        # Check to see if this data needs to be splited up and sent in chunks
+        # Check to see if this data needs to be split up and sent in chunks
         max_size = MAX_CHUNK_SIZE - len(header)
-        message_splited = [message[x:x + max_size] 
+        message_split = [message[x:x + max_size] 
                            for x in range(0, len(message), max_size)]
         # Add the header to every chunk
-        return [header + s for s in message_splited]
+        return [header + s for s in message_split]
 
     def _extend_and_serialize_multiple_derivation_paths(self,
                                                         derivation_paths: List[bytes]):
