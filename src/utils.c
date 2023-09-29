@@ -49,9 +49,9 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
                                                 0);
 #pragma GCC diagnostic pop
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
@@ -80,9 +80,9 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                                 12);
 #pragma GCC diagnostic pop
             cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
-                                     privateKeyData,
-                                     PRIVATEKEY_LENGTH,
-                                     privateKey);
+                                              privateKeyData,
+                                              PRIVATEKEY_LENGTH,
+                                              privateKey);
         }
         CATCH_OTHER(e) {
             MEMCLEAR(privateKeyData);
