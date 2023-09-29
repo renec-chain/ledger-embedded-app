@@ -54,9 +54,7 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
@@ -84,9 +82,7 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
             MEMCLEAR(privateKeyData);
             THROW(e);
         }
-        FINALLY {
-            MEMCLEAR(privateKeyData);
-        }
+        FINALLY { MEMCLEAR(privateKeyData); }
     }
     END_TRY;
 }
