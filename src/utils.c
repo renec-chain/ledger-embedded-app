@@ -37,6 +37,8 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
             os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
                                                 CX_CURVE_Ed25519,
                                                 derivationPath,
@@ -45,7 +47,8 @@ void get_private_key(cx_ecfp_private_key_t *privateKey,
                                                 NULL,
                                                 NULL,
                                                 0);
-            cx_ecfp_init_private_key(CX_CURVE_Ed25519,
+#pragma GCC diagnostic pop
+            cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                      privateKeyData,
                                      PRIVATEKEY_LENGTH,
                                      privateKey);
@@ -65,6 +68,8 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
     uint8_t privateKeyData[PRIVATEKEY_LENGTH];
     BEGIN_TRY {
         TRY {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
             os_perso_derive_node_bip32_seed_key(HDW_ED25519_SLIP10,
                                                 CX_CURVE_Ed25519,
                                                 derivationPath,
@@ -73,7 +78,8 @@ void get_private_key_with_seed(cx_ecfp_private_key_t *privateKey,
                                                 NULL,
                                                 (unsigned char *) "ed25519 seed",
                                                 12);
-            cx_ecfp_init_private_key(CX_CURVE_Ed25519,
+#pragma GCC diagnostic pop
+            cx_ecfp_init_private_key_no_throw(CX_CURVE_Ed25519,
                                      privateKeyData,
                                      PRIVATEKEY_LENGTH,
                                      privateKey);
