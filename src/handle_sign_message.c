@@ -1,3 +1,5 @@
+#include <cx.h>
+
 #include "io.h"
 #include "utils.h"
 #include "handle_swap_sign_transaction.h"
