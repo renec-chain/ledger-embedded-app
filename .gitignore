@@ -11,3 +11,4 @@ librenec/target
 *venv
 .pytest_cache
 **/snapshots-tmp
+target/

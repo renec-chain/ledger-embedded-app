@@ -34,16 +34,16 @@
 #define SIGNATURE_LENGTH   64
 #define HASH_LENGTH        32
 #define PUBKEY_LENGTH      HASH_LENGTH
-#define PRIVATEKEY_LENGTH  64
+#define PRIVATEKEY_LENGTH  HASH_LENGTH
 
 #define MAX_OFFCHAIN_MESSAGE_LENGTH    (MAX_MESSAGE_LENGTH - 1 > 1212 ? 1212 : MAX_MESSAGE_LENGTH - 1)
-#define OFFCHAIN_MESSAGE_HEADER_LENGTH 20
+#define OFFCHAIN_MESSAGE_HEADER_LENGTH 19
 
 typedef enum InstructionCode {
-    InsGetAppConfiguration = 0x03,
-    InsGetPubkey = 0x04,
-    InsSignMessage = 0x05,
-    InsSignOffchainMessage = 0x06
+    InsGetAppConfiguration = 0x01,
+    InsGetPubkey = 0x02,
+    InsSignMessage = 0x03,
+    InsSignOffchainMessage = 0x04
 } InstructionCode;
 
 extern volatile bool G_called_from_swap;
