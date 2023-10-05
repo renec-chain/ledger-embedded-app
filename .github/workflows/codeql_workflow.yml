@@ -37,10 +37,6 @@ jobs:
           distribution: 'microsoft'
           java-version: '11'
 
-      - name: Check java version
-        run: |
-          java --version
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
