@@ -8,19 +8,24 @@ on:
     branches:
       - master
     paths-ignore:
-      - '.github/workflows/*.yml'
+      # - '.github/workflows/*.yml'
       - 'tests/*'
 
 jobs:
   analyse:
     name: Analyse
     strategy: 
+      fail-fast: false
       matrix:
         sdk: [ "$NANOS_SDK", "$NANOX_SDK", "$NANOSP_SDK" ]
         language: [ 'cpp' ]
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     container:
-      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy:latest
 
     steps:
       - name: Clone
