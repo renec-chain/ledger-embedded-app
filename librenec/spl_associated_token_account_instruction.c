@@ -52,11 +52,6 @@ int print_spl_associated_token_account_create_info(const SplAssociatedTokenAccou
     item = transaction_summary_general_item();
     summary_item_set_pubkey(item, "Funded by", info->funder);
 
-    /* hard-code current token account rent-exempt balance?
-    item = transaction_summary_general_item();
-    summary_item_set_amount(item, "Funded with", 2039280);
-    */
-
     return 0;
 }
 

@@ -1,4 +1,5 @@
 #include <cx.h>
+#include <os_helpers.h>
 
 #include "io.h"
 #include "utils.h"
@@ -57,9 +58,6 @@ void handle_sign_message_parse_message(volatile unsigned int *tx) {
     print_config.signer_pubkey = &header->pubkeys[signer_index];
 
     if (G_command.non_confirm) {
-        // Uncomment this to allow unattended signing.
-        //*tx = set_result_sign_message();
-        // THROW(ApduReplySuccess);
         UNUSED(tx);
         THROW(ApduReplySdkNotSupported);
     }

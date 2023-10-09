@@ -1,4 +1,6 @@
-#pragma once
+#ifndef UTIL_H
+#define UTIL_H
+
 #include <string.h>
 
 #define ARRAY_LEN(a) (sizeof(a) / sizeof((a)[0]))
@@ -18,3 +20,5 @@ void explicit_bzero(void *s, size_t n);
 #ifndef UNUSED
 #define UNUSED(x) (void) x
 #endif
+
+#endif  // UTIL_H
