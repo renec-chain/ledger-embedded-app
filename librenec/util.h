@@ -14,7 +14,3 @@ void explicit_bzero(void *s, size_t n);
 #define assert_string_equal(actual, expected) assert(strcmp(actual, expected) == 0)
 
 #define assert_pubkey_equal(actual, expected) assert(memcmp(actual, expected, 32) == 0)
-
-#ifndef UNUSED
-#define UNUSED(x) (void) x
-#endif
