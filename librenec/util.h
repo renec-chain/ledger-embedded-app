@@ -21,4 +21,4 @@ void explicit_bzero(void *s, size_t n);
 #define UNUSED(x) (void) x
 #endif
 
-#endif // UTIL_H
+#endif  // UTIL_H
