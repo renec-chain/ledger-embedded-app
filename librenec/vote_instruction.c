@@ -1,3 +1,4 @@
+#include "os_helpers.h"
 #include "common_byte_strings.h"
 #include "instruction.h"
 #include "renec/print_config.h"

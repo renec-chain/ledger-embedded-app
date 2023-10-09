@@ -1,3 +1,4 @@
+#include "os_helpers.h"
 #include <string.h>
 
 #include "handle_check_address.h"

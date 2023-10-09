@@ -1,11 +1,11 @@
+#ifndef _UTILS_H_
+#define _UTILS_H_
+
 #include "os.h"
 #include "cx.h"
 #include "globals.h"
 #include <string.h>
 #include "apdu.h"
-
-#ifndef _UTILS_H_
-#define _UTILS_H_
 
 #define ARRAY_COUNT(array) (sizeof(array) / sizeof(array[0]))
 
@@ -63,7 +63,6 @@ uint8_t set_result_sign_message(void);
     } while (0)
 #define PRINTF(msg, arg) printf(msg, arg)
 #define PIC(code)        code
-// #define TARGET_NANOS 1
 #define TARGET_BLUE    1
 #define MEMCLEAR(dest) explicit_bzero(&dest, sizeof(dest));
 #else

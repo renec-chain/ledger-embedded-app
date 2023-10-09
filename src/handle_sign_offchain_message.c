@@ -1,3 +1,4 @@
+#include "os_helpers.h"
 #include "io.h"
 #include "os.h"
 #include "ux.h"
@@ -89,9 +90,6 @@ void handle_sign_offchain_message(volatile unsigned int *flags, volatile unsigne
     }
 
     if (G_command.non_confirm) {
-        // Uncomment this to allow unattended signing.
-        //*tx = set_result_sign_message();
-        // THROW(ApduReplySuccess);
         UNUSED(tx);
         THROW(ApduReplySdkNotSupported);
     }

@@ -23,6 +23,7 @@
 #include "nbgl_use_case.h"
 #include "ui_api.h"
 #include "utils.h"
+#include "os_helpers.h"
 
 static void quit_app_callback(void) { os_sched_exit(-1); }
 

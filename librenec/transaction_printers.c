@@ -4,6 +4,7 @@
 #include "renec/transaction_summary.h"
 #include "transaction_printers.h"
 #include "util.h"
+#include "os_helpers.h"
 
 const InstructionBrief nonce_brief[] = {
     SYSTEM_IX_BRIEF(SystemAdvanceNonceAccount),
