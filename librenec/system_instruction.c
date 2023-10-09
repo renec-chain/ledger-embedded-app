@@ -5,7 +5,7 @@
 #include "system_instruction.h"
 #include "util.h"
 #include <string.h>
-#include "os_helpers.h"
+#include <os_helpers.h>
 
 #define CREATE_ACCOUNT_TITLE "Create account"
 

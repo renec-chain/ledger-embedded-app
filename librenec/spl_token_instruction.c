@@ -5,7 +5,7 @@
 #include "spl_token_instruction.h"
 #include "token_info.h"
 #include "util.h"
-#include "os_helpers.h"
+#include <os_helpers.h>
 
 const Pubkey spl_token_program_id = {{PROGRAM_ID_SPL_TOKEN}};
 

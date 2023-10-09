@@ -1,5 +1,5 @@
 #include <cx.h>
-#include "os_helpers.h"
+#include <os_helpers.h>
 
 #include "io.h"
 #include "utils.h"
