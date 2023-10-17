@@ -1,8 +1,8 @@
 #pragma once
 
 #include "renec/parser.h"
-#include "spl_associated_token_account_instruction.h"
-#include "spl_token_instruction.h"
+#include "rpl_associated_token_account_instruction.h"
+#include "rpl_token_instruction.h"
 #include "stake_instruction.h"
 #include "system_instruction.h"
 #include "vote_instruction.h"
@@ -13,17 +13,17 @@ enum ProgramId {
     ProgramIdStake,
     ProgramIdSystem,
     ProgramIdVote,
-    ProgramIdSplToken,
-    ProgramIdSplAssociatedTokenAccount,
-    ProgramIdSplMemo,
+    ProgramIdRplToken,
+    ProgramIdRplAssociatedTokenAccount,
+    ProgramIdRplMemo,
     ProgramIdSerumAssertOwner,
 };
 
 typedef struct InstructionInfo {
     enum ProgramId kind;
     union {
-        SplAssociatedTokenAccountInfo spl_associated_token_account;
-        SplTokenInfo spl_token;
+        RplAssociatedTokenAccountInfo rpl_associated_token_account;
+        RplTokenInfo rpl_token;
         StakeInfo stake;
         SystemInfo system;
         VoteInfo vote;
@@ -37,17 +37,17 @@ typedef struct InstructionBrief {
     enum ProgramId program_id;
     union {
         int none;
-        SplTokenInstructionKind spl_token;
+        RplTokenInstructionKind rpl_token;
         enum SystemInstructionKind system;
         enum StakeInstructionKind stake;
         enum VoteInstructionKind vote;
     };
 } InstructionBrief;
 
-#define SPL_ASSOCIATED_TOKEN_ACCOUNT_IX_BRIEF \
-    { ProgramIdSplAssociatedTokenAccount, .none = 0 }
-#define SPL_TOKEN_IX_BRIEF(spl_token_ix) \
-    { ProgramIdSplToken, .spl_token = (spl_token_ix) }
+#define RPL_ASSOCIATED_TOKEN_ACCOUNT_IX_BRIEF \
+    { ProgramIdRplAssociatedTokenAccount, .none = 0 }
+#define RPL_TOKEN_IX_BRIEF(rpl_token_ix) \
+    { ProgramIdRplToken, .rpl_token = (rpl_token_ix) }
 #define SYSTEM_IX_BRIEF(system_ix) \
     { ProgramIdSystem, .system = (system_ix) }
 #define STAKE_IX_BRIEF(stake_ix) \

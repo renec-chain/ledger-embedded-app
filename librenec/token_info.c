@@ -1,4 +1,4 @@
-#include "spl_token_instruction.h"
+#include "rpl_token_instruction.h"
 #include "token_info.h"
 #include "util.h"
 
@@ -8,7 +8,7 @@ struct token_info {
 };
 
 const struct token_info token_infos[] = {
-    {&spl_token_program_id, "WRENEC"},
+    {&rpl_token_program_id, "WRENEC"},
 };
 
 const char* get_token_symbol(const Pubkey* mint_address) {

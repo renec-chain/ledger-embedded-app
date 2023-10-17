@@ -24,7 +24,7 @@ _This command returns specific application configuration_
 
 | _CLA_ | _INS_ | _P1_ | _P2_ | _Lc_ | _Le_ |
 | ----- | :---: | ---: | ---- | :--: | ---: |
-| E0    |  04   |   00 | 00   |  00  |   04 |
+| E0    |  01   |   00 | 00   |  00  |   04 |
 
 ##### Input data
 
@@ -50,7 +50,7 @@ _This command returns a RENEC pubkey for the given BIP 32 path_
 
 | _CLA_ | _INS_ | _P1_ | _P2_ |   _Lc_   |     _Le_ |
 | ----- | :---: | ---: | ---- | :------: | -------: |
-| E0    |  05   |   00 | 00   | variable | variable |
+| E0    |  02   |   00 | 00   | variable | variable |
 
 ##### Input data
 
@@ -77,7 +77,7 @@ _This command signs a RENEC Transaction after having the user validate the trans
 
 | _CLA_ | _INS_ | _P1_ | _P2_ |   _Lc_   |     _Le_ |
 | ----- | :---: | ---: | ---- | :------: | -------: |
-| E0    |  06   |   01 | 00   | variable | variable |
+| E0    |  03   |   01 | 00   | variable | variable |
 
 ##### Input data
 
@@ -106,7 +106,7 @@ _This command signs a RENEC Off-Chain Message after having the user validate the
 
 | _CLA_ | _INS_ | _P1_ | _P2_ |   _Lc_   |     _Le_ |
 | ----- | :---: | ---: | ---- | :------: | -------: |
-| E0    |  07   |   01 | 00   | variable | variable |
+| E0    |  04   |   01 | 00   | variable | variable |
 
 ##### Input data
 

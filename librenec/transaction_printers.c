@@ -143,41 +143,41 @@ const InstructionBrief vote_authorize_checked_both_brief[] = {
 #define is_vote_authorize_checked_both(infos, infos_length) \
     instruction_infos_match_briefs(infos, vote_authorize_checked_both_brief, infos_length)
 
-const InstructionBrief spl_token_create_mint_brief[] = {
+const InstructionBrief rpl_token_create_mint_brief[] = {
     SYSTEM_IX_BRIEF(SystemCreateAccount),
-    SPL_TOKEN_IX_BRIEF(SplTokenKind(InitializeMint)),
+    RPL_TOKEN_IX_BRIEF(RplTokenKind(InitializeMint)),
 };
-#define is_spl_token_create_mint(infos, infos_length) \
-    instruction_infos_match_briefs(infos, spl_token_create_mint_brief, infos_length)
+#define is_rpl_token_create_mint(infos, infos_length) \
+    instruction_infos_match_briefs(infos, rpl_token_create_mint_brief, infos_length)
 
-const InstructionBrief spl_token_create_account_brief[] = {
+const InstructionBrief rpl_token_create_account_brief[] = {
     SYSTEM_IX_BRIEF(SystemCreateAccount),
-    SPL_TOKEN_IX_BRIEF(SplTokenKind(InitializeAccount)),
+    RPL_TOKEN_IX_BRIEF(RplTokenKind(InitializeAccount)),
 };
-#define is_spl_token_create_account(infos, infos_length) \
-    instruction_infos_match_briefs(infos, spl_token_create_account_brief, infos_length)
+#define is_rpl_token_create_account(infos, infos_length) \
+    instruction_infos_match_briefs(infos, rpl_token_create_account_brief, infos_length)
 
-const InstructionBrief spl_token_create_account2_brief[] = {
+const InstructionBrief rpl_token_create_account2_brief[] = {
     SYSTEM_IX_BRIEF(SystemCreateAccount),
-    SPL_TOKEN_IX_BRIEF(SplTokenKind(InitializeAccount2)),
+    RPL_TOKEN_IX_BRIEF(RplTokenKind(InitializeAccount2)),
 };
-#define is_spl_token_create_account2(infos, infos_length) \
-    instruction_infos_match_briefs(infos, spl_token_create_account2_brief, infos_length)
+#define is_rpl_token_create_account2(infos, infos_length) \
+    instruction_infos_match_briefs(infos, rpl_token_create_account2_brief, infos_length)
 
-const InstructionBrief spl_token_create_multisig_brief[] = {
+const InstructionBrief rpl_token_create_multisig_brief[] = {
     SYSTEM_IX_BRIEF(SystemCreateAccount),
-    SPL_TOKEN_IX_BRIEF(SplTokenKind(InitializeMultisig)),
+    RPL_TOKEN_IX_BRIEF(RplTokenKind(InitializeMultisig)),
 };
-#define is_spl_token_create_multisig(infos, infos_length) \
-    instruction_infos_match_briefs(infos, spl_token_create_multisig_brief, infos_length)
+#define is_rpl_token_create_multisig(infos, infos_length) \
+    instruction_infos_match_briefs(infos, rpl_token_create_multisig_brief, infos_length)
 
-const InstructionBrief spl_associated_token_account_create_with_transfer_brief[] = {
-    SPL_ASSOCIATED_TOKEN_ACCOUNT_IX_BRIEF,
-    SPL_TOKEN_IX_BRIEF(SplTokenKind(TransferChecked)),
+const InstructionBrief rpl_associated_token_account_create_with_transfer_brief[] = {
+    RPL_ASSOCIATED_TOKEN_ACCOUNT_IX_BRIEF,
+    RPL_TOKEN_IX_BRIEF(RplTokenKind(TransferChecked)),
 };
-#define is_spl_associated_token_account_create_with_transfer(infos, infos_length)           \
+#define is_rpl_associated_token_account_create_with_transfer(infos, infos_length)           \
     instruction_infos_match_briefs(infos,                                                   \
-                                   spl_associated_token_account_create_with_transfer_brief, \
+                                   rpl_associated_token_account_create_with_transfer_brief, \
                                    infos_length)
 
 static int print_create_stake_account(const PrintConfig* print_config,
@@ -431,13 +431,13 @@ static int print_vote_authorize_both(const PrintConfig* print_config,
     return 0;
 }
 
-static int print_spl_token_create_mint(const PrintConfig* print_config,
+static int print_rpl_token_create_mint(const PrintConfig* print_config,
                                        InstructionInfo* const* infos,
                                        size_t infos_length) {
     UNUSED(infos_length);
 
     const SystemCreateAccountInfo* ca_info = &infos[0]->system.create_account;
-    const SplTokenInitializeMintInfo* im_info = &infos[1]->spl_token.initialize_mint;
+    const RplTokenInitializeMintInfo* im_info = &infos[1]->rpl_token.initialize_mint;
 
     SummaryItem* item = transaction_summary_primary_item();
     summary_item_set_pubkey(item, "Create token mint", im_info->mint_account);
@@ -464,13 +464,13 @@ static int print_spl_token_create_mint(const PrintConfig* print_config,
     return 0;
 }
 
-static int print_spl_token_create_account(const PrintConfig* print_config,
+static int print_rpl_token_create_account(const PrintConfig* print_config,
                                           InstructionInfo* const* infos,
                                           size_t infos_length) {
     UNUSED(infos_length);
 
     const SystemCreateAccountInfo* ca_info = &infos[0]->system.create_account;
-    const SplTokenInitializeAccountInfo* ia_info = &infos[1]->spl_token.initialize_account;
+    const RplTokenInitializeAccountInfo* ia_info = &infos[1]->rpl_token.initialize_account;
 
     SummaryItem* item = transaction_summary_primary_item();
     summary_item_set_pubkey(item, "Create token acct", ia_info->token_account);
@@ -492,13 +492,13 @@ static int print_spl_token_create_account(const PrintConfig* print_config,
     return 0;
 }
 
-static int print_spl_token_create_multisig(const PrintConfig* print_config,
+static int print_rpl_token_create_multisig(const PrintConfig* print_config,
                                            InstructionInfo* const* infos,
                                            size_t infos_length) {
     UNUSED(infos_length);
 
     const SystemCreateAccountInfo* ca_info = &infos[0]->system.create_account;
-    const SplTokenInitializeMultisigInfo* im_info = &infos[1]->spl_token.initialize_multisig;
+    const RplTokenInitializeMultisigInfo* im_info = &infos[1]->rpl_token.initialize_multisig;
 
     SummaryItem* item = transaction_summary_primary_item();
     summary_item_set_pubkey(item, "Create multisig", im_info->multisig_account);
@@ -517,17 +517,17 @@ static int print_spl_token_create_multisig(const PrintConfig* print_config,
     return 0;
 }
 
-static int print_spl_associated_token_account_create_with_transfer(const PrintConfig* print_config,
+static int print_rpl_associated_token_account_create_with_transfer(const PrintConfig* print_config,
                                                                    InstructionInfo* const* infos,
                                                                    size_t infos_length) {
     UNUSED(infos_length);
 
-    const SplAssociatedTokenAccountCreateInfo* c_info =
-        &infos[0]->spl_associated_token_account.create;
-    const SplTokenTransferInfo* t_info = &infos[1]->spl_token.transfer;
+    const RplAssociatedTokenAccountCreateInfo* c_info =
+        &infos[0]->rpl_associated_token_account.create;
+    const RplTokenTransferInfo* t_info = &infos[1]->rpl_token.transfer;
 
-    print_spl_associated_token_account_create_info(c_info, print_config);
-    print_spl_token_transfer_info(t_info, print_config, false);
+    print_rpl_associated_token_account_create_info(c_info, print_config);
+    print_rpl_token_transfer_info(t_info, print_config, false);
 
     return 0;
 }
@@ -544,14 +544,14 @@ static int print_transaction_nonce_processed(const PrintConfig* print_config,
                     return print_stake_info(&(infos[0]->stake), print_config);
                 case ProgramIdVote:
                     return print_vote_info(&(infos[0]->vote), print_config);
-                case ProgramIdSplToken:
-                    return print_spl_token_info(&(infos[0]->spl_token), print_config);
-                case ProgramIdSplAssociatedTokenAccount:
-                    return print_spl_associated_token_account_info(
-                        &(infos[0]->spl_associated_token_account),
+                case ProgramIdRplToken:
+                    return print_rpl_token_info(&(infos[0]->rpl_token), print_config);
+                case ProgramIdRplAssociatedTokenAccount:
+                    return print_rpl_associated_token_account_info(
+                        &(infos[0]->rpl_associated_token_account),
                         print_config);
                 case ProgramIdSerumAssertOwner:
-                case ProgramIdSplMemo:
+                case ProgramIdRplMemo:
                 case ProgramIdUnknown:
                     break;
             }
@@ -587,15 +587,15 @@ static int print_transaction_nonce_processed(const PrintConfig* print_config,
                 return print_stake_info(&infos[1]->stake, print_config);
             } else if (is_stake_split_with_seed_v1_2(infos, infos_length)) {
                 return print_stake_split_with_seed(print_config, infos, infos_length, false);
-            } else if (is_spl_token_create_mint(infos, infos_length)) {
-                return print_spl_token_create_mint(print_config, infos, infos_length);
-            } else if (is_spl_token_create_account(infos, infos_length) ||
-                       is_spl_token_create_account2(infos, infos_length)) {
-                return print_spl_token_create_account(print_config, infos, infos_length);
-            } else if (is_spl_token_create_multisig(infos, infos_length)) {
-                return print_spl_token_create_multisig(print_config, infos, infos_length);
-            } else if (is_spl_associated_token_account_create_with_transfer(infos, infos_length)) {
-                return print_spl_associated_token_account_create_with_transfer(print_config,
+            } else if (is_rpl_token_create_mint(infos, infos_length)) {
+                return print_rpl_token_create_mint(print_config, infos, infos_length);
+            } else if (is_rpl_token_create_account(infos, infos_length) ||
+                       is_rpl_token_create_account2(infos, infos_length)) {
+                return print_rpl_token_create_account(print_config, infos, infos_length);
+            } else if (is_rpl_token_create_multisig(infos, infos_length)) {
+                return print_rpl_token_create_multisig(print_config, infos, infos_length);
+            } else if (is_rpl_associated_token_account_create_with_transfer(infos, infos_length)) {
+                return print_rpl_associated_token_account_create_with_transfer(print_config,
                                                                                infos,
                                                                                infos_length);
             }

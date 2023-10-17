@@ -1437,7 +1437,7 @@ void test_process_message_body_stake_merge() {
 #define DELEGATE        DEST_ACCOUNT
 #define NEW_OWNER       DEST_ACCOUNT
 
-void test_process_message_body_spl_token_create_token() {
+void test_process_message_body_rpl_token_create_token() {
     uint8_t message[] = {
         2, 0, 3,
         5,
@@ -1445,7 +1445,7 @@ void test_process_message_body_spl_token_create_token() {
             MINT_ACCOUNT,
             SYSVAR_RENT,
             PROGRAM_ID_SYSTEM,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         2,
             3,
@@ -1455,7 +1455,7 @@ void test_process_message_body_spl_token_create_token() {
                 0, 0, 0, 0,
                 245, 1, 0, 0, 0, 0, 0, 0,
                 88, 0, 0, 0, 0, 0, 0, 0,
-                PROGRAM_ID_SPL_TOKEN,
+                PROGRAM_ID_RPL_TOKEN,
             4,
             2,
                 1, 2,
@@ -1468,7 +1468,7 @@ void test_process_message_body_spl_token_create_token() {
     process_message_body_and_sanity_check(message, sizeof(message), 6);
 }
 
-void test_process_message_body_spl_token_create_account() {
+void test_process_message_body_rpl_token_create_account() {
     uint8_t message[] = {
         0x02, 0x00, 0x03,
         0x06,
@@ -1477,7 +1477,7 @@ void test_process_message_body_spl_token_create_account() {
             MINT_ACCOUNT,
             SYSVAR_RENT,
             PROGRAM_ID_SYSTEM,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         0x02,
             // SystemCreateAccount
@@ -1488,8 +1488,8 @@ void test_process_message_body_spl_token_create_account() {
                 0x00, 0x00, 0x00, 0x00,
                 0x80, 0x56, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00,
                 0x78, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                PROGRAM_ID_SPL_TOKEN,
-            // SplTokenInitializeAccount
+                PROGRAM_ID_RPL_TOKEN,
+            // RplTokenInitializeAccount
             0x05,
             0x04,
                 0x01, 0x02, 0x00, 0x03,
@@ -1499,7 +1499,7 @@ void test_process_message_body_spl_token_create_account() {
     process_message_body_and_sanity_check(message, sizeof(message), 6);
 }
 
-void test_process_message_body_spl_token_create_account2() {
+void test_process_message_body_rpl_token_create_account2() {
     uint8_t message[] = {
         0x02, 0x00, 0x04,
         0x06,
@@ -1508,7 +1508,7 @@ void test_process_message_body_spl_token_create_account2() {
             MINT_ACCOUNT,
             SYSVAR_RENT,
             PROGRAM_ID_SYSTEM,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         0x02,
             // SystemCreateAccount
@@ -1519,8 +1519,8 @@ void test_process_message_body_spl_token_create_account2() {
                 0x00, 0x00, 0x00, 0x00,
                 0x80, 0x56, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00,
                 0x78, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                PROGRAM_ID_SPL_TOKEN,
-            // SplTokenInitializeAccount
+                PROGRAM_ID_RPL_TOKEN,
+            // RplTokenInitializeAccount
             0x05,
             0x03,
                 0x01, 0x02, 0x00,
@@ -1531,7 +1531,7 @@ void test_process_message_body_spl_token_create_account2() {
     process_message_body_and_sanity_check(message, sizeof(message), 6);
 }
 
-void test_process_message_body_spl_token_create_multisig() {
+void test_process_message_body_rpl_token_create_multisig() {
     uint8_t message[] = {
         2, 0, 5,
         8,
@@ -1542,7 +1542,7 @@ void test_process_message_body_spl_token_create_multisig() {
             SIGNER3,
             SYSVAR_RENT,
             PROGRAM_ID_SYSTEM,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         2,
             // SystemCreateAccount
@@ -1553,8 +1553,8 @@ void test_process_message_body_spl_token_create_multisig() {
                 0, 0, 0, 0,
                 245, 1, 0, 0, 0, 0, 0, 0,
                 40, 0, 0, 0, 0, 0, 0, 0,
-                PROGRAM_ID_SPL_TOKEN,
-            // SplTokenInitializeMultisig
+                PROGRAM_ID_RPL_TOKEN,
+            // RplTokenInitializeMultisig
             7,
             5,
                 1, 5, 2, 3, 4,
@@ -1565,7 +1565,7 @@ void test_process_message_body_spl_token_create_multisig() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_token_transfer() {
+void test_process_message_body_rpl_token_transfer() {
     uint8_t message[] = {
         1, 0, 2,
         5,
@@ -1573,7 +1573,7 @@ void test_process_message_body_spl_token_transfer() {
             TOKEN_ACCOUNT,
             DEST_ACCOUNT,
             MINT_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             4,
@@ -1587,7 +1587,7 @@ void test_process_message_body_spl_token_transfer() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_token_approve() {
+void test_process_message_body_rpl_token_approve() {
     uint8_t message[] = {
         1, 0, 2,
         5,
@@ -1595,7 +1595,7 @@ void test_process_message_body_spl_token_approve() {
             TOKEN_ACCOUNT,
             MINT_ACCOUNT,
             DEST_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             4,
@@ -1609,13 +1609,13 @@ void test_process_message_body_spl_token_approve() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_token_revoke() {
+void test_process_message_body_rpl_token_revoke() {
     uint8_t message[] = {
         1, 0, 2,
         3,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             2,
@@ -1627,13 +1627,13 @@ void test_process_message_body_spl_token_revoke() {
     process_message_body_and_sanity_check(message, sizeof(message), 3);
 }
 
-void test_process_message_body_spl_token_set_authority() {
+void test_process_message_body_rpl_token_set_authority() {
     uint8_t message[] = {
         1, 0, 1,
         3,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             2,
@@ -1648,14 +1648,14 @@ void test_process_message_body_spl_token_set_authority() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_token_mint_to() {
+void test_process_message_body_rpl_token_mint_to() {
     uint8_t message[] = {
         1, 0, 0,
         4,
             OWNER_ACCOUNT,
             MINT_ACCOUNT,
             TOKEN_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             3,
@@ -1669,14 +1669,14 @@ void test_process_message_body_spl_token_mint_to() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_token_burn() {
+void test_process_message_body_rpl_token_burn() {
     uint8_t message[] = {
         1, 0, 0,
         4,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
             MINT_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             3,
@@ -1690,16 +1690,16 @@ void test_process_message_body_spl_token_burn() {
     process_message_body_and_sanity_check(message, sizeof(message), 4);
 }
 
-void test_process_message_body_spl_token_close_account() {
+void test_process_message_body_rpl_token_close_account() {
     uint8_t message[] = {
         0x01, 0x00, 0x01,
         0x03,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         0x01,
-            // SplTokenCloseAccount
+            // RplTokenCloseAccount
             0x02,
             0x03,
                 0x01, 0x00, 0x00,
@@ -1709,14 +1709,14 @@ void test_process_message_body_spl_token_close_account() {
     process_message_body_and_sanity_check(message, sizeof(message), 4);
 }
 
-void test_process_message_body_spl_token_freeze_account() {
+void test_process_message_body_rpl_token_freeze_account() {
     uint8_t message[] = {
         1, 0, 2,
         4,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
             MINT_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             3,
@@ -1728,14 +1728,14 @@ void test_process_message_body_spl_token_freeze_account() {
     process_message_body_and_sanity_check(message, sizeof(message), 4);
 }
 
-void test_process_message_body_spl_token_thaw_account() {
+void test_process_message_body_rpl_token_thaw_account() {
     uint8_t message[] = {
         1, 0, 2,
         4,
             OWNER_ACCOUNT,
             TOKEN_ACCOUNT,
             MINT_ACCOUNT,
-            PROGRAM_ID_SPL_TOKEN,
+            PROGRAM_ID_RPL_TOKEN,
         BLOCKHASH,
         1,
             3,
@@ -1747,7 +1747,7 @@ void test_process_message_body_spl_token_thaw_account() {
     process_message_body_and_sanity_check(message, sizeof(message), 4);
 }
 
-void test_process_message_body_spl_associated_token_create() {
+void test_process_message_body_rpl_associated_token_create() {
     uint8_t message[] = {
         0x01, 0x00, 0x05,
         0x06,
@@ -1759,7 +1759,7 @@ void test_process_message_body_spl_associated_token_create() {
             0x8c, 0x97, 0x25, 0x8f, 0x4e, 0x24, 0x89, 0xf1, 0xbb, 0x3d, 0x10, 0x29, 0x14, 0x8e, 0x0d, 0x83, 0x0b, 0x5a, 0x13, 0x99, 0xda, 0xff, 0x10, 0x84, 0x04, 0x8e, 0x7b, 0xd8, 0xdb, 0xe9, 0xf8, 0x59,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x01,
-            // SPL Associate Token Account -- Create
+            // RPL Associate Token Account -- Create
             0x05,
             0x06,
                 0x00, 0x01, 0x00, 0x02, 0x03, 0x04,
@@ -1769,7 +1769,7 @@ void test_process_message_body_spl_associated_token_create() {
 }
 
 // old version of ata create that accessed the rent sysvar via account load
-void test_process_message_body_spl_associated_token_create_deprecated() {
+void test_process_message_body_rpl_associated_token_create_deprecated() {
     uint8_t message[] = {
         0x01, 0x00, 0x05,
         0x07,
@@ -1782,7 +1782,7 @@ void test_process_message_body_spl_associated_token_create_deprecated() {
             0x8c, 0x97, 0x25, 0x8f, 0x4e, 0x24, 0x89, 0xf1, 0xbb, 0x3d, 0x10, 0x29, 0x14, 0x8e, 0x0d, 0x83, 0x0b, 0x5a, 0x13, 0x99, 0xda, 0xff, 0x10, 0x84, 0x04, 0x8e, 0x7b, 0xd8, 0xdb, 0xe9, 0xf8, 0x59,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x01,
-            // SPL Associate Token Account -- Create
+            // RPL Associate Token Account -- Create
             0x06,
             0x07,
                 0x00, 0x01, 0x00, 0x02, 0x03, 0x04, 0x05,
@@ -1791,7 +1791,7 @@ void test_process_message_body_spl_associated_token_create_deprecated() {
     process_message_body_and_sanity_check(message, sizeof(message), 5);
 }
 
-void test_process_message_body_spl_associated_token_create_with_transfer() {
+void test_process_message_body_rpl_associated_token_create_with_transfer() {
     uint8_t message[] = {
         0x02, 0x00, 0x05,
         0x09,
@@ -1822,7 +1822,7 @@ void test_process_message_body_spl_associated_token_create_with_transfer() {
     process_message_body_and_sanity_check(message, sizeof(message), 9);
 }
 
-void test_process_message_body_spl_associated_token_create_with_transfer_and_assert_owner() {
+void test_process_message_body_rpl_associated_token_create_with_transfer_and_assert_owner() {
     uint8_t message[] = {
             0x01, 0x00, 0x07,
             0x0a,
@@ -1844,12 +1844,12 @@ void test_process_message_body_spl_associated_token_create_with_transfer_and_ass
                     0x03,
                 0x20,
                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                // SPL ATA create
+                // RPL ATA create
                 0x09,
                 0x07,
                     0x00, 0x01, 0x03, 0x04, 0x05, 0x06, 0x07,
                 0x00,
-                // SPL Token transfer checked
+                // RPL Token transfer checked
                 0x06,
                 0x04,
                     0x02, 0x04, 0x01, 0x00,
@@ -1864,22 +1864,22 @@ void test_process_message_body_spl_associated_token_create_with_transfer_and_ass
 /* clang-format on */
 
 int main() {
-    test_process_message_body_spl_associated_token_create_with_transfer_and_assert_owner();
-    test_process_message_body_spl_associated_token_create_with_transfer();
-    test_process_message_body_spl_associated_token_create();
-    test_process_message_body_spl_token_create_token();
-    test_process_message_body_spl_token_create_account();
-    test_process_message_body_spl_token_create_account2();
-    test_process_message_body_spl_token_create_multisig();
-    test_process_message_body_spl_token_transfer();
-    test_process_message_body_spl_token_approve();
-    test_process_message_body_spl_token_revoke();
-    test_process_message_body_spl_token_set_authority();
-    test_process_message_body_spl_token_mint_to();
-    test_process_message_body_spl_token_burn();
-    test_process_message_body_spl_token_close_account();
-    test_process_message_body_spl_token_freeze_account();
-    test_process_message_body_spl_token_thaw_account();
+    test_process_message_body_rpl_associated_token_create_with_transfer_and_assert_owner();
+    test_process_message_body_rpl_associated_token_create_with_transfer();
+    test_process_message_body_rpl_associated_token_create();
+    test_process_message_body_rpl_token_create_token();
+    test_process_message_body_rpl_token_create_account();
+    test_process_message_body_rpl_token_create_account2();
+    test_process_message_body_rpl_token_create_multisig();
+    test_process_message_body_rpl_token_transfer();
+    test_process_message_body_rpl_token_approve();
+    test_process_message_body_rpl_token_revoke();
+    test_process_message_body_rpl_token_set_authority();
+    test_process_message_body_rpl_token_mint_to();
+    test_process_message_body_rpl_token_burn();
+    test_process_message_body_rpl_token_close_account();
+    test_process_message_body_rpl_token_freeze_account();
+    test_process_message_body_rpl_token_thaw_account();
     test_process_message_body_ok();
     test_process_message_body_too_few_ix_fail();
     test_process_message_body_too_many_ix_fail();
