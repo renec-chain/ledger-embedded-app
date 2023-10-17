@@ -1437,7 +1437,7 @@ void test_process_message_body_stake_merge() {
 #define DELEGATE        DEST_ACCOUNT
 #define NEW_OWNER       DEST_ACCOUNT
 
-void test_process_message_body_spl_token_create_token() {
+void test_process_message_body_rpl_token_create_token() {
     uint8_t message[] = {
         2, 0, 3,
         5,
