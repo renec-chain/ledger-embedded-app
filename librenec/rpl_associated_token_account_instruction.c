@@ -2,15 +2,15 @@
 #include "instruction.h"
 #include "renec/parser.h"
 #include "renec/transaction_summary.h"
-#include "spl_associated_token_account_instruction.h"
+#include "rpl_associated_token_account_instruction.h"
 #include "util.h"
 
-const Pubkey spl_associated_token_account_program_id = {{PROGRAM_ID_SPL_ASSOCIATED_TOKEN_ACCOUNT}};
+const Pubkey rpl_associated_token_account_program_id = {{PROGRAM_ID_RPL_ASSOCIATED_TOKEN_ACCOUNT}};
 
-static int parse_create_spl_associated_token_account_instruction(
+static int parse_create_rpl_associated_token_account_instruction(
     const Instruction* instruction,
     const MessageHeader* header,
-    SplAssociatedTokenAccountCreateInfo* info) {
+    RplAssociatedTokenAccountCreateInfo* info) {
     InstructionAccountsIterator it;
     instruction_accounts_iterator_init(&it, header, instruction);
 
@@ -20,7 +20,7 @@ static int parse_create_spl_associated_token_account_instruction(
     BAIL_IF(instruction_accounts_iterator_next(&it, &info->mint));
     // Skip system program_id
     BAIL_IF(instruction_accounts_iterator_next(&it, NULL));
-    // Skip spl token program_id
+    // Skip rpl token program_id
     BAIL_IF(instruction_accounts_iterator_next(&it, NULL));
     // Skip (optional) rent sysvar
     instruction_accounts_iterator_next(&it, NULL);
@@ -28,15 +28,15 @@ static int parse_create_spl_associated_token_account_instruction(
     return 0;
 }
 
-int parse_spl_associated_token_account_instructions(const Instruction* instruction,
+int parse_rpl_associated_token_account_instructions(const Instruction* instruction,
                                                     const MessageHeader* header,
-                                                    SplAssociatedTokenAccountInfo* info) {
-    return parse_create_spl_associated_token_account_instruction(instruction,
+                                                    RplAssociatedTokenAccountInfo* info) {
+    return parse_create_rpl_associated_token_account_instruction(instruction,
                                                                  header,
                                                                  &info->create);
 }
 
-int print_spl_associated_token_account_create_info(const SplAssociatedTokenAccountCreateInfo* info,
+int print_rpl_associated_token_account_create_info(const RplAssociatedTokenAccountCreateInfo* info,
                                                    const PrintConfig* print_config) {
     UNUSED(print_config);
 
@@ -55,7 +55,7 @@ int print_spl_associated_token_account_create_info(const SplAssociatedTokenAccou
     return 0;
 }
 
-int print_spl_associated_token_account_info(const SplAssociatedTokenAccountInfo* info,
+int print_rpl_associated_token_account_info(const RplAssociatedTokenAccountInfo* info,
                                             const PrintConfig* print_config) {
-    return print_spl_associated_token_account_create_info(&info->create, print_config);
+    return print_rpl_associated_token_account_create_info(&info->create, print_config);
 }

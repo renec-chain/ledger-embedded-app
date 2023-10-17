@@ -3,8 +3,8 @@
 #include "renec/parser.h"
 #include "renec/message.h"
 #include "renec/print_config.h"
-#include "spl_associated_token_account_instruction.h"
-#include "spl_token_instruction.h"
+#include "rpl_associated_token_account_instruction.h"
+#include "rpl_token_instruction.h"
 #include "system_instruction.h"
 #include "stake_instruction.h"
 #include "vote_instruction.h"
@@ -43,22 +43,22 @@ int process_message_body(const uint8_t* message_body,
                 info->kind = program_id;
                 break;
             }
-            case ProgramIdSplAssociatedTokenAccount: {
-                if (parse_spl_associated_token_account_instructions(
+            case ProgramIdRplAssociatedTokenAccount: {
+                if (parse_rpl_associated_token_account_instructions(
                         &instruction,
                         header,
-                        &info->spl_associated_token_account) == 0) {
+                        &info->rpl_associated_token_account) == 0) {
                     info->kind = program_id;
                 }
                 break;
             }
-            case ProgramIdSplMemo: {
-                // SPL Memo only has one instruction and we ignore it for now
+            case ProgramIdRplMemo: {
+                // RPL Memo only has one instruction and we ignore it for now
                 info->kind = program_id;
                 break;
             }
-            case ProgramIdSplToken:
-                if (parse_spl_token_instructions(&instruction, header, &info->spl_token) == 0) {
+            case ProgramIdRplToken:
+                if (parse_rpl_token_instructions(&instruction, header, &info->rpl_token) == 0) {
                     info->kind = program_id;
                 }
                 break;
@@ -84,8 +84,8 @@ int process_message_body(const uint8_t* message_body,
                 break;
         }
         switch (info->kind) {
-            case ProgramIdSplAssociatedTokenAccount:
-            case ProgramIdSplToken:
+            case ProgramIdRplAssociatedTokenAccount:
+            case ProgramIdRplToken:
             case ProgramIdSystem:
             case ProgramIdStake:
             case ProgramIdVote:
@@ -94,7 +94,7 @@ int process_message_body(const uint8_t* message_body,
                 break;
             // Ignored instructions
             case ProgramIdSerumAssertOwner:
-            case ProgramIdSplMemo:
+            case ProgramIdRplMemo:
                 break;
         }
     }

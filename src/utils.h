@@ -71,4 +71,4 @@ uint8_t set_result_sign_message(void);
         explicit_bzero(&dest, sizeof(dest)); \
     } while (0)
 #include "bolos_target.h"
-#endif  // TEST
+#endif  // UTILS_H

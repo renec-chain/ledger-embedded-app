@@ -1,7 +1,7 @@
 #include "instruction.h"
 #include "serum_assert_owner_instruction.h"
-#include "spl_memo_instruction.h"
-#include "spl_token_instruction.h"
+#include "rpl_memo_instruction.h"
+#include "rpl_token_instruction.h"
 #include "stake_instruction.h"
 #include "system_instruction.h"
 #include "util.h"
@@ -15,14 +15,14 @@ enum ProgramId instruction_program_id(const Instruction* instruction, const Mess
         return ProgramIdStake;
     } else if (memcmp(program_id, &vote_program_id, PUBKEY_SIZE) == 0) {
         return ProgramIdVote;
-    } else if (memcmp(program_id, &spl_token_program_id, PUBKEY_SIZE) == 0) {
-        return ProgramIdSplToken;
-    } else if (memcmp(program_id, &spl_associated_token_account_program_id, PUBKEY_SIZE) == 0) {
-        return ProgramIdSplAssociatedTokenAccount;
+    } else if (memcmp(program_id, &rpl_token_program_id, PUBKEY_SIZE) == 0) {
+        return ProgramIdRplToken;
+    } else if (memcmp(program_id, &rpl_associated_token_account_program_id, PUBKEY_SIZE) == 0) {
+        return ProgramIdRplAssociatedTokenAccount;
     } else if (is_serum_assert_owner_program_id(program_id)) {
         return ProgramIdSerumAssertOwner;
-    } else if (memcmp(program_id, &spl_memo_program_id, PUBKEY_SIZE) == 0) {
-        return ProgramIdSplMemo;
+    } else if (memcmp(program_id, &rpl_memo_program_id, PUBKEY_SIZE) == 0) {
+        return ProgramIdRplMemo;
     }
 
     return ProgramIdUnknown;
@@ -41,12 +41,12 @@ bool instruction_info_matches_brief(const InstructionInfo* info, const Instructi
         switch (brief->program_id) {
             case ProgramIdSerumAssertOwner:
                 return true;
-            case ProgramIdSplAssociatedTokenAccount:
+            case ProgramIdRplAssociatedTokenAccount:
                 return true;
-            case ProgramIdSplMemo:
+            case ProgramIdRplMemo:
                 return true;
-            case ProgramIdSplToken:
-                return (brief->spl_token == info->spl_token.kind);
+            case ProgramIdRplToken:
+                return (brief->rpl_token == info->rpl_token.kind);
             case ProgramIdStake:
                 return (brief->stake == info->stake.kind);
             case ProgramIdSystem:
