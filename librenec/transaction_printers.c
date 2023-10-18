@@ -550,7 +550,6 @@ static int print_transaction_nonce_processed(const PrintConfig* print_config,
                     return print_rpl_associated_token_account_info(
                         &(infos[0]->rpl_associated_token_account),
                         print_config);
-                case ProgramIdSerumAssertOwner:
                 case ProgramIdRplMemo:
                 case ProgramIdUnknown:
                     break;
