@@ -1,5 +1,4 @@
 #include "instruction.h"
-#include "serum_assert_owner_instruction.h"
 #include "rpl_memo_instruction.h"
 #include "rpl_token_instruction.h"
 #include "stake_instruction.h"
@@ -19,8 +18,6 @@ enum ProgramId instruction_program_id(const Instruction* instruction, const Mess
         return ProgramIdRplToken;
     } else if (memcmp(program_id, &rpl_associated_token_account_program_id, PUBKEY_SIZE) == 0) {
         return ProgramIdRplAssociatedTokenAccount;
-    } else if (is_serum_assert_owner_program_id(program_id)) {
-        return ProgramIdSerumAssertOwner;
     } else if (memcmp(program_id, &rpl_memo_program_id, PUBKEY_SIZE) == 0) {
         return ProgramIdRplMemo;
     }
@@ -39,8 +36,6 @@ int instruction_validate(const Instruction* instruction, const MessageHeader* he
 bool instruction_info_matches_brief(const InstructionInfo* info, const InstructionBrief* brief) {
     if (brief->program_id == info->kind) {
         switch (brief->program_id) {
-            case ProgramIdSerumAssertOwner:
-                return true;
             case ProgramIdRplAssociatedTokenAccount:
                 return true;
             case ProgramIdRplMemo:
