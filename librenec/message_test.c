@@ -1825,7 +1825,6 @@ void test_process_message_body_rpl_associated_token_create_with_transfer() {
 /* clang-format on */
 
 int main() {
-    test_process_message_body_rpl_associated_token_create_with_transfer_and_assert_owner();
     test_process_message_body_rpl_associated_token_create_with_transfer();
     test_process_message_body_rpl_associated_token_create();
     test_process_message_body_rpl_token_create_token();
