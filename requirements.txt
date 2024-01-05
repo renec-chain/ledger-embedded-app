@@ -7,7 +7,7 @@ idna==3.4
 ledgerblue==0.1.48
 Pillow==9.5.0
 protobuf==4.24.3
-pycryptodomex==3.19.0
+pycryptodomex==3.19.1
 python-u2flib-host==3.0.3
 requests==2.31.0
 six==1.16.0
