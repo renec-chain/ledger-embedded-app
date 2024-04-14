@@ -3,7 +3,7 @@ chardet==5.2.0
 ECPy==1.2.5
 future==0.18.3
 hidapi==0.14.0
-idna==3.4
+idna==3.7
 ledgerblue==0.1.48
 Pillow==9.5.0
 protobuf==4.24.3
