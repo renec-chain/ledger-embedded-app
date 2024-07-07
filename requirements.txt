@@ -1,4 +1,4 @@
-certifi==2023.7.22
+certifi==2024.7.4
 chardet==5.2.0
 ECPy==1.2.5
 future==0.18.3
