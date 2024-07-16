@@ -14,3 +14,4 @@ six==1.16.0
 urllib3==2.0.5
 websocket_client==1.6.3
 ruff==0.0.291
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
